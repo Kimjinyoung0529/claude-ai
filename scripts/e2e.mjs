@@ -55,6 +55,25 @@ const stages = {
     results.llm = { model: id, load: res, cold: a.stats, warm: b.stats, dl: prog.at(-1) }; writeFileSync('reports/e2e-llm.json', JSON.stringify({ note: 'headless Chromium(SwiftShader), WASM CPU, 샌드박스 VM. iPhone 실측 아님.', ...results.llm }, null, 2));
     assert(t.errors.filter(e => !/405/.test(e)).length === 0, '콘솔 오류 없음 ' + t.errors.join('|')); await t.close();
   },
+
+  async speech() {
+    const { readFileSync, readdirSync, writeFileSync: wf } = await import('node:fs');
+    const wav = (f32, f) => { const b = Buffer.alloc(44 + f32.length * 2); b.write('RIFF', 0); b.writeUInt32LE(36 + f32.length * 2, 4); b.write('WAVEfmt ', 8); b.writeUInt32LE(16, 16); b.writeUInt16LE(1, 20); b.writeUInt16LE(1, 22); b.writeUInt32LE(16000, 24); b.writeUInt32LE(32000, 28); b.writeUInt16LE(2, 32); b.writeUInt16LE(16, 34); b.write('data', 36); b.writeUInt32LE(f32.length * 2, 40); f32.forEach((v, i) => b.writeInt16LE(Math.max(-1, Math.min(1, v)) * 32767, 44 + i * 2)); wf(f, b); };
+    const jfkRes = await fetch('https://huggingface.co/datasets/Xenova/transformers.js-docs/resolve/main/jfk.wav'); wf('.cache/jfk.wav', Buffer.from(await jfkRes.arrayBuffer()));
+    const ids = readdirSync('.cache/audio').filter(f => f.endsWith('.f32')); const rd = f => { const b = readFileSync('.cache/audio/' + f); return new Float32Array(b.buffer, b.byteOffset, b.length / 4); };
+    const by = {}; for (const f of ids) { const sp = f.split('-')[0]; (by[sp] ||= []).push(f); } const sp = Object.keys(by).slice(0, 2); const gap = new Float32Array(8000); const parts = []; [0, 1, 0, 1].forEach((k, i) => { parts.push(rd(by[sp[k]][(i >= 2 ? 1 : 0) % by[sp[k]].length]), gap); });
+    const mix = new Float32Array(parts.reduce((n, p) => n + p.length, 0)); let o = 0; for (const p of parts) { mix.set(p, o); o += p.length; } wav(mix, '.cache/mix2.wav');
+    const t = await start({ mic: true }); const { page } = t; page.setDefaultTimeout(600000); await page.goto(t.srv.url + '#record'); await page.waitForSelector('#recbtn'); await page.locator('select').nth(0).selectOption('en'); await page.locator('select').nth(1).selectOption('tiny');
+    const run = async (file, opts) => { const fc = page.waitForEvent('filechooser'); await page.getByText('오디오 파일 선택').click(); await (await fc).setFiles(file); await page.waitForSelector('text=전사 결과'); return page.evaluate(() => document.querySelector('main').innerText); };
+    const t0 = Date.now(); const txt = await run('.cache/jfk.wav'); console.log('  JFK 전사:', txt.replace(/\n+/g, ' ').slice(0, 400), `(${((Date.now() - t0) / 1000).toFixed(0)}s)`);
+    assert(/ask not/i.test(txt) && /country/i.test(txt), '실제 Whisper 전사에 JFK 문장 포함');
+    assert(/화자 1/.test(txt), '화자 구분 결과 표시(익명 화자 라벨)');
+    results.speech = { jfk: txt.replace(/\n+/g, ' ').slice(0, 300) };
+    await page.getByText('버리기').click(); await page.getByText('버리기', { exact: true }).last().click().catch(() => {}); await page.waitForSelector('#recbtn');
+    const t1 = Date.now(); const txt2 = await run('.cache/mix2.wav'); const nsp = (txt2.match(/화자 \d/g) || []); console.log('  2화자 합성 결과 화자 라벨:', [...new Set(nsp)].join(','), `(${((Date.now() - t1) / 1000).toFixed(0)}s)`); results.speech.mix = { labels: [...new Set(nsp)], text: txt2.replace(/\n+/g, ' ').slice(0, 300) };
+    assert([...new Set(nsp)].length >= 2, '2화자 합성 오디오에서 화자 2명 이상 표시');
+    assert(t.errors.filter(e => !/405|cache/i.test(e)).length === 0, '콘솔 오류 없음 ' + t.errors.join('|')); writeFileSync('reports/e2e-speech.json', JSON.stringify({ note: 'headless Chromium WASM. Whisper Base(ko 옵션), 영어 JFK + LibriSpeech 합성 2화자. 한국어/실기기 아님.', ...results.speech }, null, 2)); await t.close();
+  },
   async mcp() {
     const m = await startDemoMcp(); const t = await start(); const { page } = t; await page.goto(t.srv.url + '#agent'); await page.waitForSelector('.page');
     const r = await page.evaluate(async url => { const { McpConnection } = await import('./view-agent.js').then(() => ({ McpConnection: null })).catch(() => ({})); return null; }, m.url);

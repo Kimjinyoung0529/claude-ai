@@ -1,0 +1,37 @@
+{
+  "note": "headless Chromium(SwiftShader), WASM CPU, 샌드박스 VM. iPhone 실측 아님.",
+  "model": "onnx-community/Qwen3-0.6B-ONNX",
+  "load": {
+    "id": "onnx-community/Qwen3-0.6B-ONNX",
+    "backend": "wasm",
+    "dtype": "q8",
+    "loadMs": 15138,
+    "fellBack": false,
+    "errors": []
+  },
+  "cold": {
+    "tokens": 9,
+    "ttftMs": 3663,
+    "totalMs": 5513,
+    "tokPerSec": 4.32,
+    "cold": true,
+    "backend": "wasm",
+    "dtype": "q8",
+    "stopped": false
+  },
+  "warm": {
+    "tokens": 9,
+    "ttftMs": 567,
+    "totalMs": 2474,
+    "tokPerSec": 4.2,
+    "cold": false,
+    "backend": "wasm",
+    "dtype": "q8",
+    "stopped": false
+  },
+  "dl": {
+    "l": 626816115,
+    "t": 626816115,
+    "s": "다운로드 중"
+  }
+}
