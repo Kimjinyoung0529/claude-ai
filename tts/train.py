@@ -79,16 +79,18 @@ def main():
             warm = min(1.0, (step + 1) / 400)
             for g in opt.param_groups:
                 g["lr"] = a.lr * warm
-            mel_l, pri_l, dur_l = model(tx, mel, ml)
-            loss = mel_l + 0.5 * pri_l + dur_l
+            r = model(tx, mel, ml)
+            w_bin = min(1.0, max(0.0, (step - 1500) / 2000))  # 정렬이 잡힌 뒤 서서히 켬
+            loss = r["mel"] + r["dur"] + r["fs"] + w_bin * r["bin"]
             opt.zero_grad()
             loss.backward()
-            torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+            torch.nn.utils.clip_grad_norm_(model.parameters(), 5.0)
             opt.step()
             step += 1
             if step % 20 == 0:
-                print(f"step {step} mel {mel_l.item():.3f} prior {pri_l.item():.3f} "
-                      f"dur {dur_l.item():.3f} elapsed {(time.time() - t0) / 60:.1f}m", flush=True)
+                print(f"step {step} mel {r['mel'].item():.3f} dur {r['dur'].item():.3f} "
+                      f"fs {r['fs'].item():.3f} bin {r['bin'].item():.3f} "
+                      f"spread {r['spread'].item():.2f} elapsed {(time.time() - t0) / 60:.1f}m", flush=True)
             if time.time() - last_save > 300 or time.time() > deadline:
                 torch.save({"model": model.state_dict(), "opt": opt.state_dict(), "step": step,
                             "mean": data["mean"], "std": data["std"]}, "ckpt/last.pt")
