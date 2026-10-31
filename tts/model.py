@@ -140,8 +140,9 @@ def forward_sum(logp, tlen, flen, blank=-1.0):
 
 
 class TTS(nn.Module):
-    def __init__(self, n_vocab, d=192, enc_layers=4, dec_layers=4, heads=2, ff=768):
+    def __init__(self, n_vocab, d=192, enc_layers=4, dec_layers=4, heads=2, ff=768, n_spk=1):
         super().__init__()
+        self.spk = nn.Embedding(n_spk, d)
         self.emb = nn.Embedding(n_vocab, d, padding_idx=0)
         self.enc = Stack(d, enc_layers, heads, ff)
         self.aligner = Aligner(n_vocab)
@@ -152,15 +153,17 @@ class TTS(nn.Module):
         self.dec = Stack(d, dec_layers, heads, ff)
         self.out = nn.Linear(d, N_MELS)
 
-    def encode(self, ids):
+    def encode(self, ids, spk=None):
         pad = ids.eq(0)
         h = self.enc(self.emb(ids) * math.sqrt(self.emb.embedding_dim), pad)
+        if spk is not None:
+            h = (h + self.spk(spk)[:, None, :]).masked_fill(pad.unsqueeze(-1), 0.0)
         logd = self.dur(h.transpose(1, 2)).squeeze(1)
         return h, pad, logd
 
-    def forward(self, ids, mel, mel_len):
+    def forward(self, ids, mel, mel_len, spk=None):
         """반환: dict(mel, dur, fs, bin, spread). spread=가장 긴 음소가 차지하는 프레임 비율(붕괴 감시)."""
-        h, pad, logd = self.encode(ids)
+        h, pad, logd = self.encode(ids, spk)
         B, T = ids.shape
         Fm = mel.size(1)
         fpad = torch.arange(Fm)[None] >= mel_len[:, None]
@@ -181,8 +184,8 @@ class TTS(nn.Module):
         return {"mel": mel_loss, "dur": dloss, "fs": fs, "bin": bin_loss, "spread": spread}
 
     @torch.no_grad()
-    def infer(self, ids, speed=1.0):
-        h, pad, logd = self.encode(ids)
+    def infer(self, ids, spk=None, speed=1.0):
+        h, pad, logd = self.encode(ids, spk)
         dur = (torch.exp(logd) - 1).clamp(min=1).mul(1.0 / speed).round().long()
         dur = dur.masked_fill(pad, 0)
         L = int(dur.sum(1).max())
