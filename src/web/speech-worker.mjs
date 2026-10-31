@@ -5,7 +5,7 @@ import { ORT_BASE } from './ort-config.mjs';
 import { hfHost, hfUrl } from './hf-config.mjs';
 import { planChunks, stitchChunks, detectSuspicious } from '../speech/diarize.mjs';
 import { diarizeAudio } from '../speech/pipeline.mjs';
-const __h = await hfHost(); if (__h) env.remoteHost = __h;
+const ready = hfHost().then(h => { if (h) env.remoteHost = h; });
 env.allowLocalModels = false; env.backends.onnx.wasm.wasmPaths = ORT_BASE; ort.env.wasm.wasmPaths = ORT_BASE; ort.env.wasm.numThreads = Math.min(4, self.navigator?.hardwareConcurrency || 1);
 const post = m => self.postMessage(m); let cancelled = false;
 const WHISPER = { tiny: 'onnx-community/whisper-tiny', base: 'onnx-community/whisper-base', small: 'onnx-community/whisper-small' };
@@ -48,4 +48,4 @@ async function run({ audio, lang, size, diarize, startChunk = 0, prior = [] }) {
   }
   post({ type: 'done', chunks, diar: dz, suspicious: detectSuspicious(chunks, { durationSec: dur }), skippedSilent: skipped, stats: { audioSec: +dur.toFixed(1), asrSec: +(asrMs / 1000).toFixed(1), totalSec: +((performance.now() - t0) / 1000).toFixed(1), model: size } });
 }
-self.onmessage = async ({ data: m }) => { if (m.type === 'cancel') { cancelled = true; return; } try { await run(m); } catch (e) { post({ type: e.name === 'AbortError' ? 'cancelled' : 'error', message: String(e?.message || e) }); } };
+self.onmessage = async ({ data: m }) => { if (m.type === 'cancel') { cancelled = true; return; } try { await ready; await run(m); } catch (e) { post({ type: e.name === 'AbortError' ? 'cancelled' : 'error', message: String(e?.message || e) }); } };

@@ -2,7 +2,7 @@
 import { pipeline, TextStreamer, InterruptableStoppingCriteria, env } from '@huggingface/transformers';
 import { ORT_BASE } from './ort-config.mjs';
 import { hfHost } from './hf-config.mjs';
-const __h = await hfHost(); if (__h) env.remoteHost = __h;
+const ready = hfHost().then(h => { if (h) env.remoteHost = h; });
 env.allowLocalModels = false; env.backends.onnx.wasm.wasmPaths = ORT_BASE;
 let gen = null, stopper = null, info = null, loadAbort = false, genCount = 0;
 const post = (m) => self.postMessage(m);
@@ -37,4 +37,4 @@ async function generate({ rid, messages, max_new_tokens = 512, temperature = 0.7
     const total = performance.now() - t0; post({ type: 'done', rid, text, stats: { tokens, ttftMs: Math.round(first ?? total), totalMs: Math.round(total), tokPerSec: tokens > 1 ? +((tokens - 1) / ((total - (first ?? 0)) / 1000)).toFixed(2) : null, cold, backend: info.backend, dtype: info.dtype, stopped: stopper.stop_requested } });
   } catch (e) { post({ type: 'error', rid, phase: 'generate', message: String(e?.message || e), deviceLost: /device.*lost|GPU/i.test(String(e)) }); }
 }
-self.onmessage = (e) => { const m = e.data; if (m.type === 'load') load(m); else if (m.type === 'generate') generate(m); else if (m.type === 'stop') stopper?.interrupt(); else if (m.type === 'unload') unload(); };
+self.onmessage = async (e) => { const m = e.data; await ready; if (m.type === 'load') load(m); else if (m.type === 'generate') generate(m); else if (m.type === 'stop') stopper?.interrupt(); else if (m.type === 'unload') unload(); };
