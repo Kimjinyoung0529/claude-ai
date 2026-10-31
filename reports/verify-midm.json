@@ -1,7 +1,7 @@
 {
   "note": "Node onnxruntime-node CPU, greedy 24토큰, 기준=PyTorch fp32. 정확도 벤치마크가 아니라 변환 동등성 점검.",
   "model": "midm",
-  "loadMs": 3326,
+  "loadMs": 3038,
   "prompts": 6,
   "firstTokenAgree": 5,
   "meanCommonPrefixFrac": 0.438,
@@ -15,7 +15,7 @@
       "commonPrefixTokens": 8,
       "refLen": 8,
       "firstTokenMatch": true,
-      "ms": 9975
+      "ms": 10092
     },
     {
       "prompt": "인공지능을 초등학생에게 두 문장으로 설명해 주세요.",
@@ -25,7 +25,7 @@
       "commonPrefixTokens": 7,
       "refLen": 24,
       "firstTokenMatch": true,
-      "ms": 13236
+      "ms": 13113
     },
     {
       "prompt": "다음 문장을 존댓말로 바꿔 주세요: 밥 먹었어?",
@@ -35,7 +35,7 @@
       "commonPrefixTokens": 5,
       "refLen": 5,
       "firstTokenMatch": true,
-      "ms": 8982
+      "ms": 9001
     },
     {
       "prompt": "1부터 5까지 더하면 얼마인가요?",
@@ -45,7 +45,7 @@
       "commonPrefixTokens": 6,
       "refLen": 24,
       "firstTokenMatch": true,
-      "ms": 10767
+      "ms": 10780
     },
     {
       "prompt": "김치찌개 재료를 세 가지만 알려 주세요.",
@@ -55,7 +55,7 @@
       "commonPrefixTokens": 2,
       "refLen": 24,
       "firstTokenMatch": true,
-      "ms": 13122
+      "ms": 12935
     },
     {
       "prompt": "Translate to English: 오늘 날씨가 좋네요.",
@@ -65,7 +65,7 @@
       "commonPrefixTokens": 0,
       "refLen": 6,
       "firstTokenMatch": false,
-      "ms": 9283
+      "ms": 9595
     }
   ]
 }
