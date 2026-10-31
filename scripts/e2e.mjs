@@ -74,6 +74,24 @@ const stages = {
     assert([...new Set(nsp)].length >= 2, '2화자 합성 오디오에서 화자 2명 이상 표시');
     assert(t.errors.filter(e => !/405|cache/i.test(e)).length === 0, '콘솔 오류 없음 ' + t.errors.join('|')); writeFileSync('reports/e2e-speech.json', JSON.stringify({ note: 'headless Chromium WASM. Whisper Base(ko 옵션), 영어 JFK + LibriSpeech 합성 2화자. 한국어/실기기 아님.', ...results.speech }, null, 2)); await t.close();
   },
+
+  async misc() {
+    const t = await start(); const { page } = t; page.setDefaultTimeout(600000); await page.goto(t.srv.url + '#settings'); await page.waitForFunction(() => window.__ns);
+    // 1) 커널 측정
+    await page.getByText('커널 측정').click(); await page.waitForSelector('.tbl', { timeout: 120000 }); const tbl = await page.locator('.tbl').innerText(); console.log('  커널 측정표:\n' + tbl.split('\n').map(l => '    ' + l).join('\n'));
+    results.kernels = tbl; assert(/js:/.test(tbl) && /wasm-simd:/.test(tbl), 'JS/WASM-SIMD 백엔드 측정 포함'); assert(/webgpu:/.test(tbl), 'WebGPU 백엔드 측정 포함(이 환경은 SwiftShader 소프트웨어 GPU)');
+    // 2) 의미 검색
+    await page.evaluate(async () => { const s = window.__ns.store; await s.create('notes', { title: '빵 만들기', body: '밀가루와 이스트를 섞어 반죽하고 오븐에서 굽는다. 발효 시간이 중요하다.', tags: [] }); await s.create('notes', { title: '주식 투자 메모', body: '금리 인상기에는 채권 가격이 하락하는 경향이 있다.', tags: [] }); await s.create('notes', { title: '여행 계획', body: '제주도 비행기 예약과 렌터카를 확인해야 한다.', tags: [] }); });
+    await page.goto(t.srv.url + '#notes'); await page.waitForSelector('input[type=search]'); await page.locator('label:has-text("의미 검색") input').check(); const t0 = Date.now(); await page.fill('input[type=search]', '제빵 반죽 오븐'); await page.waitForSelector('.item .chip.lav', { timeout: 600000 });
+    const first = await page.locator('.list .item').first().innerText(); console.log('  의미 검색 1위:', first.replace(/\n/g, ' '), `(${((Date.now() - t0) / 1000).toFixed(0)}s, 모델 다운로드·색인 포함)`); assert(/빵 만들기/.test(first), '의미 검색: "제빵 반죽 오븐" → "빵 만들기" 1위 (키워드 불일치 질의)'); results.semantic = { query: '제빵 반죽 오븐', top: first.replace(/\n/g, ' ') };
+    // 3) 에이전트(실제 로컬 모델)
+    await page.goto(t.srv.url + '#agent'); await page.waitForSelector('textarea'); await page.evaluate(async () => { await window.__ns.loadModel(window.__catalog.RUNTIME_MODELS[0], { device: 'wasm' }); });
+    await page.fill('textarea', '노트 목록을 조회해서 제목들을 알려줘'); await page.getByRole('button', { name: '실행', exact: true }).click(); await page.waitForSelector('text=결과', { timeout: 600000 });
+    const res = await page.locator('main').innerText(); const status = (res.match(/결과\s*\n?\s*(\w+)/) || [])[1]; console.log('  에이전트 결과 상태:', status, '\n' + res.split('\n').filter(l => l.trim()).slice(0, 30).map(l => '    ' + l.slice(0, 160)).join('\n'));
+    results.agent = { status, text: res.slice(0, 1200) }; assert(['done', 'failed', 'max_steps'].includes(status), '에이전트 루프가 정의된 상태로 종료: ' + status);
+    writeFileSync('reports/e2e-misc.json', JSON.stringify({ note: 'headless Chromium. 커널=SwiftShader 소프트웨어 WebGPU. 에이전트=Qwen3-0.6B 실제 추론.', ...results }, null, 2));
+    assert(t.errors.filter(e => !/405|cache/i.test(e)).length === 0, '콘솔 오류 없음 ' + t.errors.join('|')); await t.close();
+  },
   async mcp() {
     const m = await startDemoMcp(); const t = await start(); const { page } = t; await page.goto(t.srv.url + '#agent'); await page.waitForSelector('.page');
     const r = await page.evaluate(async url => { const { McpConnection } = await import('./view-agent.js').then(() => ({ McpConnection: null })).catch(() => ({})); return null; }, m.url);

@@ -1,0 +1,11 @@
+{
+  "note": "headless Chromium WASM. Whisper Base(ko 옵션), 영어 JFK + LibriSpeech 합성 2화자. 한국어/실기기 아님.",
+  "jfk": "전사 결과 11초 오디오 · Whisper tiny 6.4초 · 화자 1명 감지 nullnull 익명 화자 구분입니다(신원 식별 아님). 겹쳐 말한 0.0초와 짧은 발화 0개는 '미분류'로 남깁니다. 같은 사람이 나뉘면 '합치기'를 쓰세요. 화자 1 00:00 화자 1 And so my fellow Americans ask not what your country can do for you, ask what you can do for your country. AI 요약·할 일 노트로 저장 내보내기 버리기",
+  "mix": {
+    "labels": [
+      "화자 2",
+      "화자 1"
+    ],
+    "text": "전사 결과 44.4초 오디오 · Whisper tiny 9.7초 · 화자 2명 감지 nullnull 익명 화자 구분입니다(신원 식별 아님). 겹쳐 말한 0.0초와 짧은 발화 0개는 '미분류'로 남깁니다. 같은 사람이 나뉘면 '합치기'를 쓰세요. 화자 1 화자 2 00:00 화자 1 The best of us are not exempt from ego-tistical thoughts. 00:05 화자 2 Mr. Quilter is the apostle of the middle classes and we are glad to welco"
+  }
+}
