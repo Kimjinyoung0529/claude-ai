@@ -103,6 +103,15 @@ const stages = {
     writeFileSync('reports/e2e-converted-midm.json', JSON.stringify({ note: 'headless Chromium WASM CPU. 직접 변환(onnxruntime-genai int4) Midm-2.0-Mini-Instruct. iPhone 실측 아님.', load: info, loadWallSec: +((Date.now() - t0) / 1000).toFixed(0), answer1: a, answer2: b }, null, 2));
     assert(t.errors.filter(e => !/405|cache/i.test(e)).length === 0, '콘솔 오류 없음 ' + t.errors.join('|')); await t.close();
   },
+
+  async reuse() {
+    const id = process.env.MODEL || 'yasserrmd/glm5.1-distill-onnx'; const dt = process.env.DT || 'q8'; const mb = +(process.env.MB || 1768);
+    const t = await start(); const { page } = t; page.setDefaultTimeout(1200000); await page.goto(t.srv.url + '#chat'); await page.waitForFunction(() => window.__ns);
+    const t0 = Date.now(); const info = await page.evaluate(async ([id, dt, mb]) => await window.__ns.loadModel({ id, label: id, sizes: { [dt]: mb } }, { device: 'wasm' }), [id, dt, mb]); console.log('  로드:', JSON.stringify(info), `${((Date.now() - t0) / 1000).toFixed(0)}s`);
+    const a = await page.evaluate(async () => await window.__ns.runLLM([{ role: 'user', content: '대한민국의 수도는 어디인가요? 한 문장으로 답하세요.' }], { temperature: 0, max_new_tokens: 40 })); console.log('  응답:', JSON.stringify(a.text), JSON.stringify(a.stats));
+    assert(a.text.trim().length > 0, id + ' 브라우저에서 실제 텍스트 생성'); results.reuse = { id, dt, load: info, answer: a };
+    writeFileSync('reports/e2e-reuse-' + id.split('/')[1] + '.json', JSON.stringify({ note: 'headless Chromium WASM. 기존 ONNX 재사용 모델의 실제 로딩·생성.', ...results.reuse }, null, 2)); await t.close();
+  },
   async mcp() {
     const m = await startDemoMcp(); const t = await start(); const { page } = t; await page.goto(t.srv.url + '#agent'); await page.waitForSelector('.page');
     const r = await page.evaluate(async url => { const { McpConnection } = await import('./view-agent.js').then(() => ({ McpConnection: null })).catch(() => ({})); return null; }, m.url);

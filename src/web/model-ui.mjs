@@ -1,5 +1,5 @@
 import { h, mb, progressBar, toast } from './ui.mjs';
-import { RUNTIME_MODELS, pickDtype, pickDevice, modelBytes, memoryBudgetOk } from '../llm/catalog.mjs';
+import { RUNTIME_MODELS, loadCustom, slowOnCpu, pickDtype, pickDevice, modelBytes, memoryBudgetOk } from '../llm/catalog.mjs';
 // 상단 모델 상태바: 로드 전/로딩(진행·중단)/준비/오류.
 export function modelBar(ctx) {
   const { llm } = ctx; const root = h('div', { class: 'modelbar' }); const pb = progressBar();
@@ -15,9 +15,9 @@ export function modelBar(ctx) {
 export async function chooseModelDialog(ctx) {
   const { dialog } = await import('./ui.mjs'); const { caps, llm } = ctx;
   return dialog(close => [h('h3', {}, '대화 모델 선택'), h('p', { class: 'sub' }, caps.webgpu ? `GPU 가속 가능${caps.fp16 ? ' · FP16 지원' : ''}` : 'GPU 가속 불가 · CPU로 실행됩니다 (느릴 수 있음)'),
-    ...RUNTIME_MODELS.map(m => { const dt = pickDtype(m, caps), b = modelBytes(m, dt), mem = memoryBudgetOk(m, dt, caps); const cur = llm.model?.model.id === m.id && llm.ready;
+    ...[...RUNTIME_MODELS, ...loadCustom(localStorage)].map(m => { const dt = pickDtype(m, caps), b = modelBytes(m, dt), mem = memoryBudgetOk(m, dt, caps); const cur = llm.model?.model.id === m.id && llm.ready;
       return h('button', { class: 'card item', style: { display: 'block', width: '100%', textAlign: 'left', cursor: 'pointer' }, onclick: async () => { close(); try { await ctx.loadModel(m); toast(m.label + ' 준비됨'); } catch (e) { if (e.name !== 'AbortError') toast(e.message.slice(0, 200), true); } } },
         h('div', { class: 'row' }, h('b', { class: 'grow' }, m.label), cur ? h('span', { class: 'chip lime' }, '사용 중') : null, m.rec === 'default' ? h('span', { class: 'chip lav' }, '추천') : null),
-        h('div', { class: 'sub', style: { margin: '4px 0 0' } }, `${m.note} · 다운로드 ${mb(b)} (${dt}) · ${m.lang}`), mem.ok ? null : h('div', { class: 'chip warn' }, `메모리 부족 가능 (≈${mem.needMB}MB 필요)`), m.heavy ? h('div', { class: 'chip warn' }, '무거움 · iPhone에서 실패할 수 있음') : null); }),
+        h('div', { class: 'sub', style: { margin: '4px 0 0' } }, `${m.note} · 다운로드 ${mb(b)} (${dt}) · ${m.lang}`), mem.ok ? null : h('div', { class: 'chip warn' }, `메모리 부족 가능 (≈${mem.needMB}MB 필요)`), (!caps.webgpu && slowOnCpu(m, dt)) ? h('div', { class: 'chip warn' }, 'CPU에서 매우 느림 (int4)') : null, m.heavy ? h('div', { class: 'chip warn' }, '무거움 · iPhone에서 실패할 수 있음') : null); }),
     h('button', { class: 'btn', onclick: () => close() }, '닫기')]);
 }

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-31T10:36:47.108Z",
+  "generatedAt": "2026-10-31T11:10:36.696Z",
   "note": "목록에 있다고 실행되는 것이 아님. status 는 실제 조사·변환 시도 결과.",
   "models": [
     {
@@ -53,18 +53,21 @@
     {
       "id": "kakaocorp/kanana-2-3b-instruct",
       "status": "needs-export",
-      "detail": "qwen3 구조라 런타임 지원. 3B fp32 export 는 메모리 한도 때문에 genai 빌더 경로로 시도 필요.",
+      "detail": "시도하지 않음. qwen3 구조라 런타임·빌더 모두 지원하지만 3B int4 + 임베딩이 2GB 단일 청크 한도를 넘고, 측정상 브라우저 CPU에서 int4가 매우 느려 효용이 낮음. 청크 분할 로직과 GPU 검증 환경이 필요.",
       "license": "other",
       "revision": "6a5d7889964c4c590299d16e309eabab1f73f8a9",
       "gated": false
     },
     {
       "id": "K-intelligence/Midm-2.0-Mini-Instruct",
-      "status": "needs-export",
-      "detail": "llama 구조(MIT). optimum fp32 export 는 RSS 13.9GB 에서 OOM. genai 빌더(int4) 경로 시도.",
+      "status": "converted",
+      "detail": "직접 변환(onnxruntime-genai int4, 임베딩은 원본 fp16 Gather+Cast로 교체). 원본 PyTorch fp32 대비 6개 프롬프트: 첫 토큰 5/6 일치, 평균 공통 접두 44%(int4라 동일하지 않음). 브라우저 WASM 로딩 26초·한국어 정답 생성 확인. 단 CPU 속도 0.13~0.19 tok/s로 사실상 사용 불가(GPU 경로 미검증). 산출물 1.93GB는 저장소에 포함하지 않음 — 본인 HF 저장소에 올려 '사용자 지정 모델'로 등록.",
       "license": "mit",
       "revision": "383eb221c52a32278f1985257b264ade8d982e60",
-      "gated": false
+      "gated": false,
+      "artifactBytes": 1929224192,
+      "verifiedIn": "Node onnxruntime-node + headless Chromium WASM",
+      "browserTokPerSec": 0.19
     },
     {
       "id": "LGAI-EXAONE/EXAONE-4.0-1.2B",
@@ -85,7 +88,7 @@
     {
       "id": "ibm-granite/granite-4.2-3b",
       "status": "needs-export",
-      "detail": "granite 구조(Apache-2.0), optimum·런타임 모두 지원. 3B 라 메모리 한도 때문에 genai 빌더 경로로 시도 필요.",
+      "detail": "시도하지 않음. 위 kanana-2-3b와 같은 이유(크기 한도·CPU 속도). 빌더 지원 구조라 같은 절차(scripts/convert-llm + finalize-genai + patch-embed)로 시도 가능.",
       "license": "apache-2.0",
       "revision": "4e9c275e232f10211ec88644d106a1f6a1b60e06",
       "gated": false

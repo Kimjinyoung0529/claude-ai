@@ -1,0 +1,38 @@
+{
+  "note": "headless Chromium WASM CPU. 직접 변환(onnxruntime-genai int4) Midm-2.0-Mini-Instruct. iPhone 실측 아님.",
+  "load": {
+    "id": "local/midm",
+    "backend": "wasm",
+    "dtype": "q4",
+    "loadMs": 26167,
+    "fellBack": false,
+    "errors": []
+  },
+  "loadWallSec": 388,
+  "answer1": {
+    "text": "대한민국의 수도는 서울입니다.",
+    "stats": {
+      "tokens": 8,
+      "ttftMs": 113588,
+      "totalMs": 149817,
+      "tokPerSec": 0.19,
+      "cold": true,
+      "backend": "wasm",
+      "dtype": "q4",
+      "stopped": false
+    }
+  },
+  "answer2": {
+    "text": "1부터 5까지의 합은 15입니다.",
+    "stats": {
+      "tokens": 13,
+      "ttftMs": 117730,
+      "totalMs": 211936,
+      "tokPerSec": 0.13,
+      "cold": false,
+      "backend": "wasm",
+      "dtype": "q4",
+      "stopped": false
+    }
+  }
+}

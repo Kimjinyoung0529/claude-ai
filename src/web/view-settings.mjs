@@ -1,5 +1,5 @@
 import { h, toast, dialog, confirmDlg, mb, download, progressBar } from './ui.mjs';
-import { RUNTIME_MODELS, mergeStatus, STATUS_LABEL } from '../llm/catalog.mjs';
+import { RUNTIME_MODELS, mergeStatus, STATUS_LABEL, loadCustom, saveCustom, validateCustom } from '../llm/catalog.mjs';
 import { taskKey } from '../accel/scheduler.mjs';
 export async function mountSettings(ctx, root) {
   const { caps, store, sched } = ctx; const page = h('div', { class: 'page' }); root.append(page);
@@ -35,6 +35,11 @@ export async function mountSettings(ctx, root) {
   renderAccel();
   // ── 모델
   page.append(h('h2', {}, '모델'), h('div', { class: 'card' }, h('b', {}, '지금 실행 가능한 모델'), h('p', { class: 'sub' }, '브라우저에서 내려받아 실행합니다. 처음 한 번만 다운로드합니다.'), ...RUNTIME_MODELS.map(m => h('div', { class: 'row', style: { padding: '6px 0' } }, h('span', { class: 'grow' }, m.label, h('small', { class: 'sub', style: { display: 'block', margin: 0 } }, Object.entries(m.sizes).map(([k, v]) => `${k} ${v}MB`).join(' · '))), h('button', { class: 'btn sm', onclick: async () => { try { await ctx.loadModel(m); toast('준비됨'); } catch (e) { if (e.name !== 'AbortError') toast(e.message.slice(0, 200), true); } } }, '불러오기')))));
+  const customBox = h('div', { class: 'card' });
+  const renderCustom = () => { const list = loadCustom(localStorage); const id = h('input', { placeholder: '내계정/모델-onnx-q4', autocapitalize: 'off' }), label = h('input', { placeholder: '표시 이름(선택)' }), dtype = h('select', {}, ['q4', 'q8', 'q4f16'].map(d => h('option', {}, d))), size = h('input', { type: 'number', placeholder: '다운로드 크기 MB', inputmode: 'numeric' });
+    customBox.replaceChildren(h('b', {}, '직접 변환한 모델 추가'), h('p', { class: 'sub' }, 'scripts/convert-llm 등으로 변환해 본인의 Hugging Face 저장소(공개)에 올린 Transformers.js 호환 ONNX 모델을 등록합니다. 파일은 그 저장소에서 내려받습니다. 브라우저 WASM에서는 int4(q4)가 q8보다 약 4배 느립니다(Qwen3-0.6B 실측).'), id, label, h('div', { class: 'row' }, dtype, size), h('button', { class: 'btn sm pri', style: { marginTop: '8px' }, onclick: () => { try { const m = validateCustom({ id: id.value.trim(), label: label.value, dtype: dtype.value, sizeMB: +size.value }); saveCustom(localStorage, [...list.filter(x => x.id !== m.id), m]); toast('등록했습니다 — 모델 선택 창에 나타납니다'); renderCustom(); } catch (e) { toast(e.message, true); } } }, '등록'),
+      ...list.map(m => h('div', { class: 'row', style: { marginTop: '6px' } }, h('code', { class: 'grow' }, m.id), h('button', { class: 'btn sm danger', onclick: () => { saveCustom(localStorage, list.filter(x => x.id !== m.id)); renderCustom(); } }, '삭제')))); };
+  renderCustom(); page.append(customBox);
   const cand = h('div'); page.append(h('h2', {}, '후보 모델 현황'), h('p', { class: 'sub' }, '아래 모델은 목록에 있다고 실행되는 것이 아닙니다. 상태가 "실행 가능"인 것만 사용할 수 있습니다.'), cand);
   fetch('./model-status.json').then(r => r.json()).then(js => { for (const g of mergeStatus(js)) cand.append(h('div', { class: 'card' }, h('b', {}, g.title), ...g.items.map(m => h('div', { style: { padding: '8px 0', borderTop: '1px solid var(--line)' } }, h('div', { class: 'row' }, h('code', { class: 'grow' }, m.id), h('span', { class: 'chip ' + (m.status === 'runtime' ? 'lime' : m.status?.startsWith('blocked') ? 'bad' : 'warn') }, STATUS_LABEL[m.status] || m.status)), h('div', { class: 'sub', style: { margin: '2px 0 0' } }, [m.license ? `라이선스 ${m.license}` : null, m.detail].filter(Boolean).join(' · ')))))); }).catch(() => cand.append(h('p', { class: 'sub' }, '현황 파일을 불러오지 못했습니다')));
   // ── 데이터
