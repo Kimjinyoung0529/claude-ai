@@ -27,3 +27,6 @@ print('external refs patched:', n, os.listdir(dst), os.listdir(dst + '/onnx'))
 # Transformers.js 는 tokenizer_config.json 의 chat_template 을 읽는다(별도 .jinja 파일은 읽지 않음)
 tc = json.load(open(dst + '/tokenizer_config.json')); j = dst + '/chat_template.jinja'
 if 'chat_template' not in tc and os.path.exists(j): tc['chat_template'] = open(j).read(); json.dump(tc, open(dst + '/tokenizer_config.json', 'w'), ensure_ascii=False, indent=1); print('chat_template embedded')
+# 브라우저(ORT Web)는 외부 데이터 파일을 명시해야 마운트한다: 청크 1개(<2GB)
+cj = json.load(open(dst + '/config.json')); cj.setdefault('transformers.js_config', {})['use_external_data_format'] = {'model_q4.onnx': 1}
+json.dump(cj, open(dst + '/config.json', 'w'), ensure_ascii=False, indent=1); print('use_external_data_format set')
