@@ -1,0 +1,124 @@
+[
+ {
+  "id": "NoemaAI-labs/Noema-1.5-4B-Fast",
+  "group": "experimental",
+  "modelType": "qwen3_5_text",
+  "transformersConfig": null,
+  "configError": "The checkpoint you are trying to load has model type `qwen3_5_text` but Transformers does not recognize this architecture. This could be because of an issue wit",
+  "optimumOnnx": false,
+  "exporterError": "\"qwen3-5-text is not supported yet for transformers. Only ['bert', 'visual_bert', 'albert', 'convbert', 'electra', 'roformer', 'squeezebert'"
+ },
+ {
+  "id": "NoemaAI-labs/Noema-1.5-4B-Deep",
+  "group": "experimental",
+  "modelType": "qwen3_5_text",
+  "transformersConfig": null,
+  "configError": "The checkpoint you are trying to load has model type `qwen3_5_text` but Transformers does not recognize this architecture. This could be because of an issue wit",
+  "optimumOnnx": false,
+  "exporterError": "\"qwen3-5-text is not supported yet for transformers. Only ['bert', 'visual_bert', 'albert', 'convbert', 'electra', 'roformer', 'squeezebert'"
+ },
+ {
+  "id": "clzoro/Qwen3.5-4B-Claude-distill",
+  "group": "experimental",
+  "modelType": "qwen3_5",
+  "transformersConfig": null,
+  "configError": "The checkpoint you are trying to load has model type `qwen3_5` but Transformers does not recognize this architecture. This could be because of an issue with the",
+  "optimumOnnx": false,
+  "exporterError": "\"qwen3-5 is not supported yet for transformers. Only ['bert', 'visual_bert', 'albert', 'convbert', 'electra', 'roformer', 'squeezebert', 'mo"
+ },
+ {
+  "id": "clzoro/Qwen3.5-4B-KIMI-Distill",
+  "group": "experimental",
+  "modelType": "qwen3_5",
+  "transformersConfig": null,
+  "configError": "The checkpoint you are trying to load has model type `qwen3_5` but Transformers does not recognize this architecture. This could be because of an issue with the",
+  "optimumOnnx": false,
+  "exporterError": "\"qwen3-5 is not supported yet for transformers. Only ['bert', 'visual_bert', 'albert', 'convbert', 'electra', 'roformer', 'squeezebert', 'mo"
+ },
+ {
+  "id": "yasserrmd/glm5.1-distill-onnx",
+  "group": "experimental",
+  "modelType": "lfm2",
+  "transformersConfig": "Lfm2Config",
+  "hidden": 2048,
+  "optimumOnnx": false,
+  "exporterError": "\"lfm2 is not supported yet for transformers. Only ['bert', 'visual_bert', 'albert', 'convbert', 'electra', 'roformer', 'squeezebert', 'mobil"
+ },
+ {
+  "id": "kakaocorp/kanana-2-1.3b-instruct",
+  "group": "korean",
+  "modelType": "kanana2_tiny",
+  "transformersConfig": null,
+  "configError": "The repository kakaocorp/kanana-2-1.3b-instruct contains custom code which must be executed to correctly load the model. You can inspect the repository content ",
+  "optimumOnnx": false,
+  "exporterError": "\"kanana2-tiny is not supported yet for transformers. Only ['bert', 'visual_bert', 'albert', 'convbert', 'electra', 'roformer', 'squeezebert'"
+ },
+ {
+  "id": "kakaocorp/kanana-2-3b-instruct",
+  "group": "korean",
+  "modelType": "qwen3",
+  "transformersConfig": "Qwen3Config",
+  "hidden": 2560,
+  "optimumOnnx": true
+ },
+ {
+  "id": "K-intelligence/Midm-2.0-Mini-Instruct",
+  "group": "korean",
+  "modelType": "llama",
+  "transformersConfig": "LlamaConfig",
+  "hidden": 1792,
+  "optimumOnnx": true
+ },
+ {
+  "id": "LGAI-EXAONE/EXAONE-4.0-1.2B",
+  "group": "korean",
+  "modelType": "exaone4",
+  "transformersConfig": "Exaone4Config",
+  "hidden": 2048,
+  "optimumOnnx": false,
+  "exporterError": "\"exaone4 is not supported yet for transformers. Only ['bert', 'visual_bert', 'albert', 'convbert', 'electra', 'roformer', 'squeezebert', 'mo"
+ },
+ {
+  "id": "naver-hyperclovax/HyperCLOVAX-SEED-Text-Instruct-1.5B",
+  "group": "korean",
+  "modelType": "llama",
+  "transformersConfig": null,
+  "configError": "You are trying to access a gated repo.\nMake sure to have access to it at https://huggingface.co/naver-hyperclovax/HyperCLOVAX-SEED-Text-Instruct-1.5B.\n401 Clien",
+  "optimumOnnx": true
+ },
+ {
+  "id": "ibm-granite/granite-4.2-3b",
+  "group": "base",
+  "modelType": "granite",
+  "transformersConfig": "GraniteConfig",
+  "hidden": 2560,
+  "optimumOnnx": true
+ },
+ {
+  "id": "LiquidAI/LFM2.5-2.6B",
+  "group": "base",
+  "modelType": "lfm2",
+  "transformersConfig": "Lfm2Config",
+  "hidden": 2048,
+  "optimumOnnx": false,
+  "exporterError": "\"lfm2 is not supported yet for transformers. Only ['bert', 'visual_bert', 'albert', 'convbert', 'electra', 'roformer', 'squeezebert', 'mobil"
+ },
+ {
+  "id": "google/gemma-4-E2B-it",
+  "group": "base",
+  "modelType": "gemma4",
+  "transformersConfig": null,
+  "configError": "The checkpoint you are trying to load has model type `gemma4` but Transformers does not recognize this architecture. This could be because of an issue with the ",
+  "optimumOnnx": false,
+  "exporterError": "\"gemma4 is not supported yet for transformers. Only ['bert', 'visual_bert', 'albert', 'convbert', 'electra', 'roformer', 'squeezebert', 'mob"
+ },
+ {
+  "id": "mistralai/Ministral-3-3B-Instruct-2512",
+  "group": "base",
+  "modelType": "mistral3",
+  "transformersConfig": null,
+  "configError": "'ministral3'",
+  "optimumOnnx": false,
+  "exporterError": "\"mistral3 is not supported yet for transformers. Only ['bert', 'visual_bert', 'albert', 'convbert', 'electra', 'roformer', 'squeezebert', 'm"
+ }
+]
