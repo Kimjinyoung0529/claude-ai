@@ -86,7 +86,7 @@ const stages = {
     const first = await page.locator('.list .item').first().innerText(); console.log('  의미 검색 1위:', first.replace(/\n/g, ' '), `(${((Date.now() - t0) / 1000).toFixed(0)}s, 모델 다운로드·색인 포함)`); assert(/빵 만들기/.test(first), '의미 검색: "제빵 반죽 오븐" → "빵 만들기" 1위 (키워드 불일치 질의)'); results.semantic = { query: '제빵 반죽 오븐', top: first.replace(/\n/g, ' ') };
     // 3) 에이전트(실제 로컬 모델)
     await page.goto(t.srv.url + '#agent'); await page.waitForSelector('textarea'); await page.evaluate(async () => { await window.__ns.loadModel(window.__catalog.RUNTIME_MODELS[0], { device: 'wasm' }); });
-    await page.fill('textarea', '노트 목록을 조회해서 제목들을 알려줘'); await page.getByRole('button', { name: '실행', exact: true }).click(); await page.waitForSelector('text=결과', { timeout: 600000 });
+    await page.fill('textarea', '노트 목록을 조회해서 제목들을 알려줘'); await page.getByRole('button', { name: '실행', exact: true }).click(); await page.waitForSelector('b:text-is("결과")', { timeout: 900000 });
     const res = await page.locator('main').innerText(); const status = (res.match(/결과\s*\n?\s*(\w+)/) || [])[1]; console.log('  에이전트 결과 상태:', status, '\n' + res.split('\n').filter(l => l.trim()).slice(0, 30).map(l => '    ' + l.slice(0, 160)).join('\n'));
     results.agent = { status, text: res.slice(0, 1200) }; assert(['done', 'failed', 'max_steps', 'timeout'].includes(status), '에이전트 루프가 정의된 상태로 종료: ' + status);
     writeFileSync('reports/e2e-misc.json', JSON.stringify({ note: 'headless Chromium. 커널=SwiftShader 소프트웨어 WebGPU. 에이전트=Qwen3-0.6B 실제 추론.', ...results }, null, 2));
