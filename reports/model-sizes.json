@@ -1,0 +1,1020 @@
+{
+  "onnx-community/Qwen3.5-0.8B-ONNX": [
+    {
+      "path": "onnx/decoder_model_merged.onnx",
+      "size": 779597
+    },
+    {
+      "path": "onnx/decoder_model_merged.onnx_data",
+      "size": 1994211328
+    },
+    {
+      "path": "onnx/decoder_model_merged.onnx_data_1",
+      "size": 1017118720
+    },
+    {
+      "path": "onnx/decoder_model_merged_fp16.onnx",
+      "size": 939523
+    },
+    {
+      "path": "onnx/decoder_model_merged_fp16.onnx_data",
+      "size": 1505771520
+    },
+    {
+      "path": "onnx/decoder_model_merged_q4.onnx",
+      "size": 876359
+    },
+    {
+      "path": "onnx/decoder_model_merged_q4.onnx_data",
+      "size": 485425152
+    },
+    {
+      "path": "onnx/decoder_model_merged_q4f16.onnx",
+      "size": 1036898
+    },
+    {
+      "path": "onnx/decoder_model_merged_q4f16.onnx_data",
+      "size": 436662272
+    },
+    {
+      "path": "onnx/decoder_model_merged_quantized.onnx",
+      "size": 890174
+    },
+    {
+      "path": "onnx/decoder_model_merged_quantized.onnx_data",
+      "size": 873111552
+    },
+    {
+      "path": "onnx/embed_tokens.onnx",
+      "size": 435
+    },
+    {
+      "path": "onnx/embed_tokens.onnx_data",
+      "size": 1017118720
+    },
+    {
+      "path": "onnx/embed_tokens_fp16.onnx",
+      "size": 637
+    },
+    {
+      "path": "onnx/embed_tokens_fp16.onnx_data",
+      "size": 508559360
+    },
+    {
+      "path": "onnx/embed_tokens_q4.onnx",
+      "size": 857
+    },
+    {
+      "path": "onnx/embed_tokens_q4.onnx_data",
+      "size": 162897920
+    },
+    {
+      "path": "onnx/embed_tokens_q4f16.onnx",
+      "size": 1064
+    },
+    {
+      "path": "onnx/embed_tokens_q4f16.onnx_data",
+      "size": 147005440
+    },
+    {
+      "path": "onnx/embed_tokens_quantized.onnx",
+      "size": 879
+    },
+    {
+      "path": "onnx/embed_tokens_quantized.onnx_data",
+      "size": 294010880
+    },
+    {
+      "path": "onnx/vision_encoder.onnx",
+      "size": 159260
+    },
+    {
+      "path": "onnx/vision_encoder.onnx_data",
+      "size": 402371584
+    },
+    {
+      "path": "onnx/vision_encoder_fp16.onnx",
+      "size": 187052
+    },
+    {
+      "path": "onnx/vision_encoder_fp16.onnx_data",
+      "size": 204798464
+    },
+    {
+      "path": "onnx/vision_encoder_q4.onnx",
+      "size": 184854
+    },
+    {
+      "path": "onnx/vision_encoder_q4.onnx_data",
+      "size": 68267008
+    },
+    {
+      "path": "onnx/vision_encoder_q4f16.onnx",
+      "size": 212694
+    },
+    {
+      "path": "onnx/vision_encoder_q4f16.onnx_data",
+      "size": 61919744
+    },
+    {
+      "path": "onnx/vision_encoder_quantized.onnx",
+      "size": 186822
+    },
+    {
+      "path": "onnx/vision_encoder_quantized.onnx_data",
+      "size": 122807296
+    }
+  ],
+  "onnx-community/Qwen3.5-2B-ONNX": [
+    {
+      "path": "onnx/decoder_model_merged.onnx",
+      "size": 779998
+    },
+    {
+      "path": "onnx/decoder_model_merged.onnx_data",
+      "size": 2067165184
+    },
+    {
+      "path": "onnx/decoder_model_merged.onnx_data_1",
+      "size": 2066960384
+    },
+    {
+      "path": "onnx/decoder_model_merged.onnx_data_2",
+      "size": 1360695296
+    },
+    {
+      "path": "onnx/decoder_model_merged.onnx_data_3",
+      "size": 2034237440
+    },
+    {
+      "path": "onnx/decoder_model_merged_fp16.onnx",
+      "size": 939847
+    },
+    {
+      "path": "onnx/decoder_model_merged_fp16.onnx_data",
+      "size": 2092384256
+    },
+    {
+      "path": "onnx/decoder_model_merged_fp16.onnx_data_1",
+      "size": 1672351744
+    },
+    {
+      "path": "onnx/decoder_model_merged_q4.onnx",
+      "size": 885982
+    },
+    {
+      "path": "onnx/decoder_model_merged_q4.onnx_data",
+      "size": 1209126912
+    },
+    {
+      "path": "onnx/decoder_model_merged_q4f16.onnx",
+      "size": 1046438
+    },
+    {
+      "path": "onnx/decoder_model_merged_q4f16.onnx_data",
+      "size": 1089777664
+    },
+    {
+      "path": "onnx/decoder_model_merged_quantized.onnx",
+      "size": 875561
+    },
+    {
+      "path": "onnx/decoder_model_merged_quantized.onnx_data",
+      "size": 1591156736
+    },
+    {
+      "path": "onnx/decoder_model_merged_quantized.onnx_data_1",
+      "size": 588021760
+    },
+    {
+      "path": "onnx/embed_tokens.onnx",
+      "size": 435
+    },
+    {
+      "path": "onnx/embed_tokens.onnx_data",
+      "size": 2034237440
+    },
+    {
+      "path": "onnx/embed_tokens_fp16.onnx",
+      "size": 638
+    },
+    {
+      "path": "onnx/embed_tokens_fp16.onnx_data",
+      "size": 1017118720
+    },
+    {
+      "path": "onnx/embed_tokens_q4.onnx",
+      "size": 857
+    },
+    {
+      "path": "onnx/embed_tokens_q4.onnx_data",
+      "size": 325795840
+    },
+    {
+      "path": "onnx/embed_tokens_q4f16.onnx",
+      "size": 1064
+    },
+    {
+      "path": "onnx/embed_tokens_q4f16.onnx_data",
+      "size": 294010880
+    },
+    {
+      "path": "onnx/embed_tokens_quantized.onnx",
+      "size": 880
+    },
+    {
+      "path": "onnx/embed_tokens_quantized.onnx_data",
+      "size": 588021760
+    },
+    {
+      "path": "onnx/vision_encoder.onnx",
+      "size": 290506
+    },
+    {
+      "path": "onnx/vision_encoder.onnx_data",
+      "size": 1325666304
+    },
+    {
+      "path": "onnx/vision_encoder_fp16.onnx",
+      "size": 345412
+    },
+    {
+      "path": "onnx/vision_encoder_fp16.onnx_data",
+      "size": 667748352
+    },
+    {
+      "path": "onnx/vision_encoder_q4.onnx",
+      "size": 338758
+    },
+    {
+      "path": "onnx/vision_encoder_q4.onnx_data",
+      "size": 217952256
+    },
+    {
+      "path": "onnx/vision_encoder_q4f16.onnx",
+      "size": 393718
+    },
+    {
+      "path": "onnx/vision_encoder_q4f16.onnx_data",
+      "size": 196945920
+    },
+    {
+      "path": "onnx/vision_encoder_quantized.onnx",
+      "size": 342579
+    },
+    {
+      "path": "onnx/vision_encoder_quantized.onnx_data",
+      "size": 392318976
+    }
+  ],
+  "onnx-community/Qwen3.5-4B-ONNX": [
+    {
+      "path": "onnx/decoder_model_merged.onnx",
+      "size": 1085359
+    },
+    {
+      "path": "onnx/decoder_model_merged.onnx_data",
+      "size": 2048497664
+    },
+    {
+      "path": "onnx/decoder_model_merged.onnx_data_1",
+      "size": 2058317824
+    },
+    {
+      "path": "onnx/decoder_model_merged.onnx_data_2",
+      "size": 2058711040
+    },
+    {
+      "path": "onnx/decoder_model_merged.onnx_data_3",
+      "size": 2048497664
+    },
+    {
+      "path": "onnx/decoder_model_merged.onnx_data_4",
+      "size": 2068541440
+    },
+    {
+      "path": "onnx/decoder_model_merged.onnx_data_5",
+      "size": 2026600448
+    },
+    {
+      "path": "onnx/decoder_model_merged.onnx_data_6",
+      "size": 1974169600
+    },
+    {
+      "path": "onnx/decoder_model_merged.onnx_data_7",
+      "size": 2542796800
+    },
+    {
+      "path": "onnx/decoder_model_merged_fp16.onnx",
+      "size": 1299038
+    },
+    {
+      "path": "onnx/decoder_model_merged_fp16.onnx_data",
+      "size": 2095788032
+    },
+    {
+      "path": "onnx/decoder_model_merged_fp16.onnx_data_1",
+      "size": 2058608640
+    },
+    {
+      "path": "onnx/decoder_model_merged_fp16.onnx_data_2",
+      "size": 2094993408
+    },
+    {
+      "path": "onnx/decoder_model_merged_fp16.onnx_data_3",
+      "size": 892618752
+    },
+    {
+      "path": "onnx/decoder_model_merged_fp16.onnx_data_4",
+      "size": 1271398400
+    },
+    {
+      "path": "onnx/decoder_model_merged_q4.onnx",
+      "size": 1206737
+    },
+    {
+      "path": "onnx/decoder_model_merged_q4.onnx_data",
+      "size": 2093368320
+    },
+    {
+      "path": "onnx/decoder_model_merged_q4.onnx_data_1",
+      "size": 607298560
+    },
+    {
+      "path": "onnx/decoder_model_merged_q4f16.onnx",
+      "size": 1421099
+    },
+    {
+      "path": "onnx/decoder_model_merged_q4f16.onnx_data",
+      "size": 2067208192
+    },
+    {
+      "path": "onnx/decoder_model_merged_q4f16.onnx_data_1",
+      "size": 367513600
+    },
+    {
+      "path": "onnx/decoder_model_merged_quantized.onnx",
+      "size": 1213641
+    },
+    {
+      "path": "onnx/decoder_model_merged_quantized.onnx_data",
+      "size": 2094602240
+    },
+    {
+      "path": "onnx/decoder_model_merged_quantized.onnx_data_1",
+      "size": 2039132160
+    },
+    {
+      "path": "onnx/decoder_model_merged_quantized.onnx_data_2",
+      "size": 735027200
+    },
+    {
+      "path": "onnx/embed_tokens.onnx",
+      "size": 435
+    },
+    {
+      "path": "onnx/embed_tokens.onnx_data",
+      "size": 2542796800
+    },
+    {
+      "path": "onnx/embed_tokens_fp16.onnx",
+      "size": 638
+    },
+    {
+      "path": "onnx/embed_tokens_fp16.onnx_data",
+      "size": 1271398400
+    },
+    {
+      "path": "onnx/embed_tokens_q4.onnx",
+      "size": 857
+    },
+    {
+      "path": "onnx/embed_tokens_q4.onnx_data",
+      "size": 407244800
+    },
+    {
+      "path": "onnx/embed_tokens_q4f16.onnx",
+      "size": 1064
+    },
+    {
+      "path": "onnx/embed_tokens_q4f16.onnx_data",
+      "size": 367513600
+    },
+    {
+      "path": "onnx/embed_tokens_quantized.onnx",
+      "size": 880
+    },
+    {
+      "path": "onnx/embed_tokens_quantized.onnx_data",
+      "size": 735027200
+    },
+    {
+      "path": "onnx/vision_encoder.onnx",
+      "size": 290507
+    },
+    {
+      "path": "onnx/vision_encoder.onnx_data",
+      "size": 1334056960
+    },
+    {
+      "path": "onnx/vision_encoder_fp16.onnx",
+      "size": 345412
+    },
+    {
+      "path": "onnx/vision_encoder_fp16.onnx_data",
+      "size": 671943680
+    },
+    {
+      "path": "onnx/vision_encoder_q4.onnx",
+      "size": 338759
+    },
+    {
+      "path": "onnx/vision_encoder_q4.onnx_data",
+      "size": 219297792
+    },
+    {
+      "path": "onnx/vision_encoder_q4f16.onnx",
+      "size": 393718
+    },
+    {
+      "path": "onnx/vision_encoder_q4f16.onnx_data",
+      "size": 198159360
+    },
+    {
+      "path": "onnx/vision_encoder_quantized.onnx",
+      "size": 342581
+    },
+    {
+      "path": "onnx/vision_encoder_quantized.onnx_data",
+      "size": 394745856
+    }
+  ],
+  "onnx-community/Qwen3-0.6B-ONNX": [
+    {
+      "path": "onnx/model.onnx",
+      "size": 315088888
+    },
+    {
+      "path": "onnx/model.onnx_data",
+      "size": 2090336256
+    },
+    {
+      "path": "onnx/model_bnb4.onnx",
+      "size": 891573033
+    },
+    {
+      "path": "onnx/model_fp16.onnx",
+      "size": 1202829402
+    },
+    {
+      "path": "onnx/model_int8.onnx",
+      "size": 617687478
+    },
+    {
+      "path": "onnx/model_q4.onnx",
+      "size": 919096585
+    },
+    {
+      "path": "onnx/model_q4f16.onnx",
+      "size": 569789750
+    },
+    {
+      "path": "onnx/model_quantized.onnx",
+      "size": 617687575
+    },
+    {
+      "path": "onnx/model_uint8.onnx",
+      "size": 617687575
+    }
+  ],
+  "onnx-community/Qwen3-1.7B-ONNX": [
+    {
+      "path": "onnx/model.onnx",
+      "size": 288490
+    },
+    {
+      "path": "onnx/model.onnx_data",
+      "size": 6903242752
+    },
+    {
+      "path": "onnx/model_bnb4.onnx",
+      "size": 2059134157
+    },
+    {
+      "path": "onnx/model_fp16.onnx",
+      "size": 275553
+    },
+    {
+      "path": "onnx/model_fp16.onnx_data",
+      "size": 3451621376
+    },
+    {
+      "path": "onnx/model_int8.onnx",
+      "size": 1742387752
+    },
+    {
+      "path": "onnx/model_q4.onnx",
+      "size": 2147212861
+    },
+    {
+      "path": "onnx/model_q4f16.onnx",
+      "size": 1426069098
+    },
+    {
+      "path": "onnx/model_quantized.onnx",
+      "size": 1742387852
+    },
+    {
+      "path": "onnx/model_uint8.onnx",
+      "size": 1742387852
+    }
+  ],
+  "onnx-community/DeepSeek-R1-Distill-Qwen-1.5B-ONNX": [
+    {
+      "path": "onnx/model.onnx",
+      "size": 531094
+    },
+    {
+      "path": "onnx/model.onnx_data",
+      "size": 7175460864
+    },
+    {
+      "path": "onnx/model_bnb4.onnx",
+      "size": 1869990808
+    },
+    {
+      "path": "onnx/model_fp16.onnx",
+      "size": 1514293932
+    },
+    {
+      "path": "onnx/model_fp16.onnx_data",
+      "size": 2091253760
+    },
+    {
+      "path": "onnx/model_int8.onnx",
+      "size": 1845367376
+    },
+    {
+      "path": "onnx/model_q4.onnx",
+      "size": 1966462264
+    },
+    {
+      "path": "onnx/model_q4f16.onnx",
+      "size": 1369397579
+    },
+    {
+      "path": "onnx/model_quantized.onnx",
+      "size": 1845367473
+    },
+    {
+      "path": "onnx/model_uint8.onnx",
+      "size": 1845367473
+    }
+  ],
+  "yasserrmd/glm5.1-distill-onnx": [
+    {
+      "path": "onnx/model_fp16.onnx",
+      "size": 151225
+    },
+    {
+      "path": "onnx/model_fp16.onnx_data",
+      "size": 2134740992
+    },
+    {
+      "path": "onnx/model_fp16.onnx_data_1",
+      "size": 222322688
+    },
+    {
+      "path": "onnx/model_q4.onnx",
+      "size": 173643
+    },
+    {
+      "path": "onnx/model_q4.onnx_data",
+      "size": 833871872
+    },
+    {
+      "path": "onnx/model_q8.onnx",
+      "size": 188702
+    },
+    {
+      "path": "onnx/model_q8.onnx_data",
+      "size": 1768022016
+    }
+  ],
+  "onnx-community/whisper-tiny": [
+    {
+      "path": "onnx/decoder_model.onnx",
+      "size": 118397483
+    },
+    {
+      "path": "onnx/decoder_model_bnb4.onnx",
+      "size": 85963382
+    },
+    {
+      "path": "onnx/decoder_model_fp16.onnx",
+      "size": 59370049
+    },
+    {
+      "path": "onnx/decoder_model_int8.onnx",
+      "size": 30461071
+    },
+    {
+      "path": "onnx/decoder_model_merged.onnx",
+      "size": 118553827
+    },
+    {
+      "path": "onnx/decoder_model_merged_bnb4.onnx",
+      "size": 86124414
+    },
+    {
+      "path": "onnx/decoder_model_merged_fp16.onnx",
+      "size": 59593896
+    },
+    {
+      "path": "onnx/decoder_model_merged_int8.onnx",
+      "size": 30719241
+    },
+    {
+      "path": "onnx/decoder_model_merged_q4.onnx",
+      "size": 86713702
+    },
+    {
+      "path": "onnx/decoder_model_merged_quantized.onnx",
+      "size": 30719241
+    },
+    {
+      "path": "onnx/decoder_model_merged_uint8.onnx",
+      "size": 30719271
+    },
+    {
+      "path": "onnx/decoder_model_q4.onnx",
+      "size": 86552958
+    },
+    {
+      "path": "onnx/decoder_model_quantized.onnx",
+      "size": 30461071
+    },
+    {
+      "path": "onnx/decoder_model_uint8.onnx",
+      "size": 30461101
+    },
+    {
+      "path": "onnx/decoder_with_past_model.onnx",
+      "size": 113638998
+    },
+    {
+      "path": "onnx/decoder_with_past_model_bnb4.onnx",
+      "size": 85258697
+    },
+    {
+      "path": "onnx/decoder_with_past_model_fp16.onnx",
+      "size": 56961977
+    },
+    {
+      "path": "onnx/decoder_with_past_model_int8.onnx",
+      "size": 29220476
+    },
+    {
+      "path": "onnx/decoder_with_past_model_q4.onnx",
+      "size": 85774593
+    },
+    {
+      "path": "onnx/decoder_with_past_model_quantized.onnx",
+      "size": 29220476
+    },
+    {
+      "path": "onnx/decoder_with_past_model_uint8.onnx",
+      "size": 29220499
+    },
+    {
+      "path": "onnx/encoder_model.onnx",
+      "size": 32904992
+    },
+    {
+      "path": "onnx/encoder_model_bnb4.onnx",
+      "size": 8578451
+    },
+    {
+      "path": "onnx/encoder_model_fp16.onnx",
+      "size": 16519192
+    },
+    {
+      "path": "onnx/encoder_model_int8.onnx",
+      "size": 10124977
+    },
+    {
+      "path": "onnx/encoder_model_q4.onnx",
+      "size": 9020667
+    },
+    {
+      "path": "onnx/encoder_model_quantized.onnx",
+      "size": 10124990
+    },
+    {
+      "path": "onnx/encoder_model_uint8.onnx",
+      "size": 10124990
+    }
+  ],
+  "onnx-community/whisper-base": [
+    {
+      "path": "onnx/decoder_model.onnx",
+      "size": 208289724
+    },
+    {
+      "path": "onnx/decoder_model_bnb4.onnx",
+      "size": 121791631
+    },
+    {
+      "path": "onnx/decoder_model_fp16.onnx",
+      "size": 104396174
+    },
+    {
+      "path": "onnx/decoder_model_int8.onnx",
+      "size": 53310178
+    },
+    {
+      "path": "onnx/decoder_model_merged.onnx",
+      "size": 208521528
+    },
+    {
+      "path": "onnx/decoder_model_merged_bnb4.onnx",
+      "size": 122030467
+    },
+    {
+      "path": "onnx/decoder_model_merged_fp16.onnx",
+      "size": 104727818
+    },
+    {
+      "path": "onnx/decoder_model_merged_int8.onnx",
+      "size": 53693315
+    },
+    {
+      "path": "onnx/decoder_model_merged_q4.onnx",
+      "size": 123602419
+    },
+    {
+      "path": "onnx/decoder_model_merged_quantized.onnx",
+      "size": 53693315
+    },
+    {
+      "path": "onnx/decoder_model_merged_uint8.onnx",
+      "size": 53693343
+    },
+    {
+      "path": "onnx/decoder_model_q4.onnx",
+      "size": 123364015
+    },
+    {
+      "path": "onnx/decoder_model_quantized.onnx",
+      "size": 53310178
+    },
+    {
+      "path": "onnx/decoder_model_uint8.onnx",
+      "size": 53310206
+    },
+    {
+      "path": "onnx/decoder_with_past_model.onnx",
+      "size": 195647494
+    },
+    {
+      "path": "onnx/decoder_with_past_model_bnb4.onnx",
+      "size": 119960957
+    },
+    {
+      "path": "onnx/decoder_with_past_model_fp16.onnx",
+      "size": 98035209
+    },
+    {
+      "path": "onnx/decoder_with_past_model_int8.onnx",
+      "size": 50075136
+    },
+    {
+      "path": "onnx/decoder_with_past_model_q4.onnx",
+      "size": 121336829
+    },
+    {
+      "path": "onnx/decoder_with_past_model_quantized.onnx",
+      "size": 50075136
+    },
+    {
+      "path": "onnx/decoder_with_past_model_uint8.onnx",
+      "size": 50075159
+    },
+    {
+      "path": "onnx/encoder_model.onnx",
+      "size": 82468078
+    },
+    {
+      "path": "onnx/encoder_model_bnb4.onnx",
+      "size": 17593091
+    },
+    {
+      "path": "onnx/encoder_model_fp16.onnx",
+      "size": 41332612
+    },
+    {
+      "path": "onnx/encoder_model_int8.onnx",
+      "size": 23201297
+    },
+    {
+      "path": "onnx/encoder_model_q4.onnx",
+      "size": 18772451
+    },
+    {
+      "path": "onnx/encoder_model_quantized.onnx",
+      "size": 23201314
+    },
+    {
+      "path": "onnx/encoder_model_uint8.onnx",
+      "size": 23201314
+    }
+  ],
+  "onnx-community/whisper-small": [
+    {
+      "path": "onnx/decoder_model.onnx",
+      "size": 614865004
+    },
+    {
+      "path": "onnx/decoder_model_bnb4.onnx",
+      "size": 225599806
+    },
+    {
+      "path": "onnx/decoder_model_fp16.onnx",
+      "size": 307924740
+    },
+    {
+      "path": "onnx/decoder_model_int8.onnx",
+      "size": 155989346
+    },
+    {
+      "path": "onnx/decoder_model_merged.onnx",
+      "size": 615324301
+    },
+    {
+      "path": "onnx/decoder_model_merged_bnb4.onnx",
+      "size": 226073167
+    },
+    {
+      "path": "onnx/decoder_model_merged_fp16.onnx",
+      "size": 308583076
+    },
+    {
+      "path": "onnx/decoder_model_merged_int8.onnx",
+      "size": 156750845
+    },
+    {
+      "path": "onnx/decoder_model_merged_q4.onnx",
+      "size": 233149327
+    },
+    {
+      "path": "onnx/decoder_model_merged_quantized.onnx",
+      "size": 156750845
+    },
+    {
+      "path": "onnx/decoder_model_merged_uint8.onnx",
+      "size": 156750906
+    },
+    {
+      "path": "onnx/decoder_model_q4.onnx",
+      "size": 232676830
+    },
+    {
+      "path": "onnx/decoder_model_quantized.onnx",
+      "size": 155989346
+    },
+    {
+      "path": "onnx/decoder_model_uint8.onnx",
+      "size": 155989407
+    },
+    {
+      "path": "onnx/decoder_with_past_model.onnx",
+      "size": 558117914
+    },
+    {
+      "path": "onnx/decoder_with_past_model_bnb4.onnx",
+      "size": 217509476
+    },
+    {
+      "path": "onnx/decoder_with_past_model_fp16.onnx",
+      "size": 279478163
+    },
+    {
+      "path": "onnx/decoder_with_past_model_int8.onnx",
+      "size": 141652708
+    },
+    {
+      "path": "onnx/decoder_with_past_model_q4.onnx",
+      "size": 223701932
+    },
+    {
+      "path": "onnx/decoder_with_past_model_quantized.onnx",
+      "size": 141652708
+    },
+    {
+      "path": "onnx/decoder_with_past_model_uint8.onnx",
+      "size": 141652756
+    },
+    {
+      "path": "onnx/encoder_model.onnx",
+      "size": 352825870
+    },
+    {
+      "path": "onnx/encoder_model_bnb4.onnx",
+      "size": 60874216
+    },
+    {
+      "path": "onnx/encoder_model_fp16.onnx",
+      "size": 176607756
+    },
+    {
+      "path": "onnx/encoder_model_int8.onnx",
+      "size": 92326127
+    },
+    {
+      "path": "onnx/encoder_model_q4.onnx",
+      "size": 66182104
+    },
+    {
+      "path": "onnx/encoder_model_quantized.onnx",
+      "size": 92326160
+    },
+    {
+      "path": "onnx/encoder_model_uint8.onnx",
+      "size": 92326160
+    }
+  ],
+  "onnx-community/pyannote-segmentation-3.0": [
+    {
+      "path": "onnx/model.onnx",
+      "size": 5986908
+    },
+    {
+      "path": "onnx/model_bnb4.onnx",
+      "size": 5815342
+    },
+    {
+      "path": "onnx/model_fp16.onnx",
+      "size": 3000918
+    },
+    {
+      "path": "onnx/model_int8.onnx",
+      "size": 1542304
+    },
+    {
+      "path": "onnx/model_q4.onnx",
+      "size": 5818448
+    },
+    {
+      "path": "onnx/model_q4f16.onnx",
+      "size": 2929425
+    },
+    {
+      "path": "onnx/model_quantized.onnx",
+      "size": 1542308
+    },
+    {
+      "path": "onnx/model_uint8.onnx",
+      "size": 1542308
+    }
+  ],
+  "OpenVoiceOS/redimnet-b2-vox2-onnx": [
+    {
+      "path": "redimnet_b2_vox2.onnx",
+      "size": 22193734
+    }
+  ],
+  "Xenova/multilingual-e5-small": [
+    {
+      "path": "onnx/model.onnx",
+      "size": 470268533
+    },
+    {
+      "path": "onnx/model_bnb4.onnx",
+      "size": 397322585
+    },
+    {
+      "path": "onnx/model_fp16.onnx",
+      "size": 235336732
+    },
+    {
+      "path": "onnx/model_int8.onnx",
+      "size": 118054593
+    },
+    {
+      "path": "onnx/model_q4.onnx",
+      "size": 398649233
+    },
+    {
+      "path": "onnx/model_q4f16.onnx",
+      "size": 204777691
+    },
+    {
+      "path": "onnx/model_quantized.onnx",
+      "size": 118308185
+    },
+    {
+      "path": "onnx/model_uint8.onnx",
+      "size": 118054630
+    }
+  ]
+}

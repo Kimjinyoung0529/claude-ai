@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<meta name="theme-color" content="#14161a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="내곁">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icon-180.png">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="./styles.css">
+<title>내곁 · Night Signal</title>
+</head>
+<body>
+<div class="app" id="app">
+  <aside class="side" aria-label="주 메뉴"><div class="brand"><span class="dot"></span>내곁<small>Night Signal</small></div><nav id="sidenav"></nav><div class="side-foot" id="sidefoot"></div></aside>
+  <main id="view" tabindex="-1"></main>
+  <nav class="tabbar" id="tabbar" aria-label="하단 메뉴"></nav>
+</div>
+<div id="toasts" role="status" aria-live="polite"></div>
+<dialog id="dlg"></dialog>
+<noscript>이 앱은 JavaScript가 필요합니다.</noscript>
+<script type="module" src="./app.js"></script>
+</body>
+</html>

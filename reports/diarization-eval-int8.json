@@ -1,0 +1,35 @@
+{
+  "note": "LibriSpeech dev-clean(영어) 발화를 이어 붙인 합성 대화. Node onnxruntime-node CPU. 한국어·겹침·잡음·실제 대화 평가 아님.",
+  "results": [
+    {
+      "scenario": "2화자 교대",
+      "seg": ".cache/seg_int8.onnx",
+      "audioSec": 61.3,
+      "procSec": 1.6,
+      "speechSec": 58.3,
+      "missedPct": 14.6,
+      "falseAlarmPct": 0,
+      "confusionPct": 0,
+      "derPct": 14.6,
+      "refSpeakers": 2,
+      "hypSpeakers": 2,
+      "overlapSec": 0,
+      "unclassifiedSec": 0
+    },
+    {
+      "scenario": "3화자 교대",
+      "seg": ".cache/seg_int8.onnx",
+      "audioSec": 77.8,
+      "procSec": 2.1,
+      "speechSec": 74.4,
+      "missedPct": 14,
+      "falseAlarmPct": 0,
+      "confusionPct": 0,
+      "derPct": 14,
+      "refSpeakers": 3,
+      "hypSpeakers": 3,
+      "overlapSec": 0,
+      "unclassifiedSec": 0.5
+    }
+  ]
+}
