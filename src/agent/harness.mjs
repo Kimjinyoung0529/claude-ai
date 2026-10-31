@@ -4,8 +4,10 @@
 import Ajv from 'ajv';
 const ajv = new Ajv({ allErrors: true, strict: false });
 
+// 토큰을 아끼기 위해 스키마 전체 대신 시그니처(인자명:타입, *=필수)만 싣는다. 실제 검증은 전체 스키마(ajv)로 한다.
+export function signature(t) { const p = t.schema?.properties || {}, req = new Set(t.schema?.required || []); return `${t.name}(${Object.entries(p).map(([k, v]) => `${k}${req.has(k) ? '*' : ''}:${v.type === 'array' ? 'array' : v.enum ? v.enum.join('|') : v.type || 'any'}`).join(', ')})`; }
 export function buildSystemPrompt(tools) {
-  const list = tools.map(t => `- ${t.name} [${t.risk}]: ${t.description}\n  args schema: ${JSON.stringify(t.schema)}`).join('\n');
+  const list = tools.map(t => `- ${signature(t)} [${t.risk}] ${t.description.slice(0, 60)}`).join('\n');
   return `당신은 사용자의 로컬 작업을 돕는 에이전트입니다. 매 턴 정확히 하나의 JSON 객체만 출력하세요(설명·코드블록 금지).
 도구 호출: {"action":"tool","tool":"이름","args":{...}}
 작업 완료: {"action":"final","answer":"사용자에게 보여줄 최종 답"}
