@@ -1,6 +1,8 @@
 // 의미 검색용 임베딩(multilingual-e5-small). 실제 모델 추론.
 import { pipeline, env } from '@huggingface/transformers';
 import { ORT_BASE } from './ort-config.mjs';
+import { hfHost } from './hf-config.mjs';
+const __h = await hfHost(); if (__h) env.remoteHost = __h;
 env.allowLocalModels = false; env.backends.onnx.wasm.wasmPaths = ORT_BASE;
 let fx = null; const files = new Map();
 const post = m => self.postMessage(m);

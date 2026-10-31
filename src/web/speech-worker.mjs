@@ -2,18 +2,20 @@
 import { pipeline, env } from '@huggingface/transformers';
 import * as ort from 'onnxruntime-web';
 import { ORT_BASE } from './ort-config.mjs';
+import { hfHost, hfUrl } from './hf-config.mjs';
 import { planChunks, stitchChunks, detectSuspicious } from '../speech/diarize.mjs';
 import { diarizeAudio } from '../speech/pipeline.mjs';
+const __h = await hfHost(); if (__h) env.remoteHost = __h;
 env.allowLocalModels = false; env.backends.onnx.wasm.wasmPaths = ORT_BASE; ort.env.wasm.wasmPaths = ORT_BASE; ort.env.wasm.numThreads = Math.min(4, self.navigator?.hardwareConcurrency || 1);
 const post = m => self.postMessage(m); let cancelled = false;
 const WHISPER = { tiny: 'onnx-community/whisper-tiny', base: 'onnx-community/whisper-base', small: 'onnx-community/whisper-small' };
 const SEG_URL = 'https://huggingface.co/onnx-community/pyannote-segmentation-3.0/resolve/main/onnx/model_int8.onnx';
 const EMB_URL = 'https://huggingface.co/OpenVoiceOS/redimnet-b2-vox2-onnx/resolve/main/redimnet_b2_vox2.onnx';
 async function cachedBytes(url, label) {
-  const c = await caches.open('ns-models'); let r = await c.match(url);
+  const c = await caches.open('ns-models'); let r = await c.match(url); const real = url; url = await hfUrl(url);
   if (!r) { r = await fetch(url); if (!r.ok) throw new Error(`${label} 다운로드 실패 (${r.status})`); const total = +r.headers.get('content-length') || 0; const reader = r.body.getReader(); const parts = []; let got = 0;
     for (;;) { const { done, value } = await reader.read(); if (done) break; parts.push(value); got += value.length; post({ type: 'progress', stage: label, loaded: got, total }); if (cancelled) throw Object.assign(new Error('취소됨'), { name: 'AbortError' }); }
-    const buf = new Uint8Array(got); let o = 0; for (const p of parts) { buf.set(p, o); o += p.length; } await c.put(url, new Response(buf)); return buf; }
+    const buf = new Uint8Array(got); let o = 0; for (const p of parts) { buf.set(p, o); o += p.length; } await c.put(real, new Response(buf)); return buf; }
   return new Uint8Array(await r.arrayBuffer());
 }
 const rms = a => { let s = 0; for (let i = 0; i < a.length; i += 8) s += a[i] * a[i]; return Math.sqrt(s / (a.length / 8)); };

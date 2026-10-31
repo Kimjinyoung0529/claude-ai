@@ -1,6 +1,8 @@
 // 대화 모델 전용 Web Worker. Transformers.js 로 실제 ONNX 모델을 로드·생성한다. mock 없음.
 import { pipeline, TextStreamer, InterruptableStoppingCriteria, env } from '@huggingface/transformers';
 import { ORT_BASE } from './ort-config.mjs';
+import { hfHost } from './hf-config.mjs';
+const __h = await hfHost(); if (__h) env.remoteHost = __h;
 env.allowLocalModels = false; env.backends.onnx.wasm.wasmPaths = ORT_BASE;
 let gen = null, stopper = null, info = null, loadAbort = false, genCount = 0;
 const post = (m) => self.postMessage(m);
