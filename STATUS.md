@@ -60,7 +60,7 @@
   - 브라우저 WASM 로딩 26초, "대한민국의 수도는 서울입니다." 생성. **속도 0.13~0.19 tok/s로 CPU에서는 실용 불가**. GPU 경로는 미검증.
   - 산출물(1.93GB)은 저장소에 없음 → 재현: `scripts/convert-llm.py` 대신 아래 "변환 재현" 참고.
 
-**기존 ONNX 재사용**: `yasserrmd/glm5.1-distill-onnx` — 결과는 `reports/e2e-reuse-glm5.1-distill-onnx.json`(있을 때) 참고.
+**기존 ONNX 재사용 — 실패**: `yasserrmd/glm5.1-distill-onnx`는 브라우저 WASM에서 세션 생성에 실패했습니다(임베딩 `GatherBlockQuantized` 커널 없음, 실측). 즉 "기존 ONNX가 있으니 실행 가능"이 아닙니다. WebGPU 경로는 미검증이며, `patch-embed` 방식 우회는 수행하지 않았습니다.
 
 **변환하지 못한 모델과 이유(모델별)**
 
@@ -73,7 +73,7 @@
 | kakaocorp/kanana-2-3b-instruct, ibm-granite/granite-4.2-3b | **시도 안 함** | 구조는 빌더·런타임 지원. 3B int4+임베딩이 2GB 단일 청크 한도를 넘고(청크 분할 필요), CPU int4가 매우 느림이 측정됨. GPU 검증 환경 필요 |
 | LiquidAI/LFM2.5-2.6B, gemma-4-E2B-it, Ministral-3-3B | exporter | 런타임은 지원하나 이 환경에서 변환 레시피를 확인하지 못함(시도 안 함) |
 
-"모든 모델 변환 완료"가 아닙니다. 14개 후보 중 직접 변환·검증은 1개(Midm), 기존 ONNX 재사용 1개(검증 결과 위 참고)입니다. 더 적합한 최신 모델로의 교체 제안은 하지 못했습니다(원본 최신성 조사는 HF API 메타데이터 수준).
+"모든 모델 변환 완료"가 아닙니다. 14개 후보 중 직접 변환·검증은 1개(Midm), 기존 ONNX 재사용 1개(브라우저 WASM 로딩 실패)입니다. 더 적합한 최신 모델로의 교체 제안은 하지 못했습니다(원본 최신성 조사는 HF API 메타데이터 수준).
 
 ## 변환 재현
 
