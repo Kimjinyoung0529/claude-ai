@@ -92,6 +92,17 @@ const stages = {
     writeFileSync('reports/e2e-misc.json', JSON.stringify({ note: 'headless Chromium. 커널=SwiftShader 소프트웨어 WebGPU. 에이전트=Qwen3-0.6B 실제 추론.', ...results }, null, 2));
     assert(t.errors.filter(e => !/405|cache/i.test(e)).length === 0, '콘솔 오류 없음 ' + t.errors.join('|')); await t.close();
   },
+
+  async converted() {
+    const t = await start(); const { page } = t; page.setDefaultTimeout(900000); await page.goto(t.srv.url + '#chat'); await page.waitForFunction(() => window.__ns);
+    const t0 = Date.now(); const info = await page.evaluate(async () => { const m = { id: 'local/midm', label: 'Midm 2.0 Mini (직접 변환 int4)', sizes: { q4: 1460 } }; return await window.__ns.loadModel(m, { device: 'wasm' }); });
+    console.log('  로드:', JSON.stringify(info), `경과 ${((Date.now() - t0) / 1000).toFixed(0)}s`); assert(info.backend === 'wasm' && info.dtype === 'q4', '직접 변환한 Midm int4 가 브라우저 WASM 에서 로드됨');
+    const gen = p => page.evaluate(async p => (await window.__ns.runLLM([{ role: 'user', content: p }], { temperature: 0, max_new_tokens: 40 })), p);
+    const a = await gen('대한민국의 수도는 어디인가요? 한 문장으로 답하세요.'); console.log('  응답:', JSON.stringify(a.text), JSON.stringify(a.stats)); assert(/서울/.test(a.text), '브라우저에서 변환 모델이 "서울" 정답 생성');
+    const b = await gen('1부터 5까지 더하면 얼마인가요?'); console.log('  응답2:', JSON.stringify(b.text.slice(0, 80)), JSON.stringify(b.stats)); assert(/15/.test(b.text), '산수 응답에 15 포함');
+    writeFileSync('reports/e2e-converted-midm.json', JSON.stringify({ note: 'headless Chromium WASM CPU. 직접 변환(onnxruntime-genai int4) Midm-2.0-Mini-Instruct. iPhone 실측 아님.', load: info, loadWallSec: +((Date.now() - t0) / 1000).toFixed(0), answer1: a, answer2: b }, null, 2));
+    assert(t.errors.filter(e => !/405|cache/i.test(e)).length === 0, '콘솔 오류 없음 ' + t.errors.join('|')); await t.close();
+  },
   async mcp() {
     const m = await startDemoMcp(); const t = await start(); const { page } = t; await page.goto(t.srv.url + '#agent'); await page.waitForSelector('.page');
     const r = await page.evaluate(async url => { const { McpConnection } = await import('./view-agent.js').then(() => ({ McpConnection: null })).catch(() => ({})); return null; }, m.url);

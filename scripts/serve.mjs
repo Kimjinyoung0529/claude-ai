@@ -14,7 +14,12 @@ if (import.meta.url === `file://${process.argv[1]}`) { const s = await serve({ p
 
 // 테스트 전용 HF 미러: 디스크 캐시 후 스트리밍(TLS 검증 유지, 큰 파일도 처리)
 async function mirror(req, res) {
-  const path = req.url.slice('/__hf/'.length); const url = 'https://huggingface.co/' + path; const key = '.cache/hf/m-' + createHash('sha1').update(url).digest('hex'); mkdirSync('.cache/hf', { recursive: true });
+  const path = req.url.slice('/__hf/'.length);
+  if (path.startsWith('local/')) { // 직접 변환한 모델: .cache/converted/<name>/<file>
+    const [, name, , , ...rest] = path.split('/'); const f = '.cache/converted/' + name + '/' + decodeURIComponent(rest.join('/').split('?')[0]);
+    if (!existsSync(f)) { res.writeHead(404, { 'access-control-allow-origin': '*' }).end(); return; }
+    res.writeHead(200, { 'access-control-allow-origin': '*', 'cross-origin-resource-policy': 'cross-origin', 'content-type': f.endsWith('.json') ? 'application/json' : 'application/octet-stream', 'content-length': statSync(f).size }); createReadStream(f).pipe(res); return;
+  } const url = 'https://huggingface.co/' + path; const key = '.cache/hf/m-' + createHash('sha1').update(url).digest('hex'); mkdirSync('.cache/hf', { recursive: true });
   const H = { 'access-control-allow-origin': '*', 'cross-origin-resource-policy': 'cross-origin' };
   try {
     if (!existsSync(key + '.json')) { let r; for (let i = 0; i < 4; i++) { try { r = await fetch(url, { redirect: 'follow' }); break; } catch (e) { if (i === 3) throw e; await new Promise(x => setTimeout(x, 1500 * (i + 1))); } }

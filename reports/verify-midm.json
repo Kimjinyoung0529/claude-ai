@@ -1,0 +1,71 @@
+{
+  "note": "Node onnxruntime-node CPU, greedy 24토큰, 기준=PyTorch fp32. 정확도 벤치마크가 아니라 변환 동등성 점검.",
+  "model": "midm",
+  "loadMs": 3326,
+  "prompts": 6,
+  "firstTokenAgree": 5,
+  "meanCommonPrefixFrac": 0.438,
+  "allPromptTokensIdentical": true,
+  "rows": [
+    {
+      "prompt": "대한민국의 수도는 어디인가요? 한 문장으로 답하세요.",
+      "promptTokensIdentical": true,
+      "refText": "대한민국의 수도는 서울입니다.",
+      "onnxText": "대한민국의 수도는 서울입니다.",
+      "commonPrefixTokens": 8,
+      "refLen": 8,
+      "firstTokenMatch": true,
+      "ms": 9975
+    },
+    {
+      "prompt": "인공지능을 초등학생에게 두 문장으로 설명해 주세요.",
+      "promptTokensIdentical": true,
+      "refText": "인공지능은 컴퓨터가 사람처럼 생각하고 배우는 기술이에요. 마치 로봇이 스스로 문제를 풀거나 그림을 그릴 수 있게",
+      "onnxText": "인공지능은 컴퓨터가 사람처럼 생각하고 문제를 해결할 수 있도록 만든 기술이에요. 마치 똑똑한 친구가 우리와 대화하거나",
+      "commonPrefixTokens": 7,
+      "refLen": 24,
+      "firstTokenMatch": true,
+      "ms": 13236
+    },
+    {
+      "prompt": "다음 문장을 존댓말로 바꿔 주세요: 밥 먹었어?",
+      "promptTokensIdentical": true,
+      "refText": "밥 먹었어?",
+      "onnxText": "밥 먹었어?",
+      "commonPrefixTokens": 5,
+      "refLen": 5,
+      "firstTokenMatch": true,
+      "ms": 8982
+    },
+    {
+      "prompt": "1부터 5까지 더하면 얼마인가요?",
+      "promptTokensIdentical": true,
+      "refText": "1부터 5까지의 숫자를 더하면 1+2+3+4+5=15입니다.",
+      "onnxText": "1부터 5까지의 합은 15입니다.",
+      "commonPrefixTokens": 6,
+      "refLen": 24,
+      "firstTokenMatch": true,
+      "ms": 10767
+    },
+    {
+      "prompt": "김치찌개 재료를 세 가지만 알려 주세요.",
+      "promptTokensIdentical": true,
+      "refText": "김치찌개를 만들기 위해 필요한 재료는 다음과 같습니다:\n\n1. 돼지고기 (삼겹살, 목살 등) - ",
+      "onnxText": "김치찌개는 한국의 대표적인 찌개 요리로, 김치와 돼지고기(또는 소고기)를 주재료로 사용합니다. 일반적",
+      "commonPrefixTokens": 2,
+      "refLen": 24,
+      "firstTokenMatch": true,
+      "ms": 13122
+    },
+    {
+      "prompt": "Translate to English: 오늘 날씨가 좋네요.",
+      "promptTokensIdentical": true,
+      "refText": "오늘 날씨가 좋네요.",
+      "onnxText": "The weather is nice today.",
+      "commonPrefixTokens": 0,
+      "refLen": 6,
+      "firstTokenMatch": false,
+      "ms": 9283
+    }
+  ]
+}
