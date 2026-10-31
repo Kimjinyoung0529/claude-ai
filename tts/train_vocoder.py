@@ -109,7 +109,7 @@ def main():
         if step % 20 == 0:
             print(f"step {step} mel_l1 {lm.item():.3f} adv {adv.item():.3f} fm {fm.item():.3f} "
                   f"D {lD.item():.3f} elapsed {(time.time() - t0) / 60:.1f}m", flush=True)
-        if time.time() - last_save > 300:
+        if time.time() - last_save > 120:
             torch.save({"G": G.state_dict(), "D": D.state_dict(), "oG": oG.state_dict(),
                         "oD": oD.state_dict(), "step": step}, "ckpt/voc.pt")
             last_save = time.time()

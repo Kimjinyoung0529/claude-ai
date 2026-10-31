@@ -191,7 +191,7 @@ def main():
                     print(f"!! 붕괴 감지 -> 마지막 정상 체크포인트(step {s['step']})로 복구, lr_scale={lr_scale}",
                           flush=True)
 
-            if time.time() - last_save > 300 or time.time() > deadline:
+            if time.time() - last_save > 120 or time.time() > deadline:
                 save(path)
                 last_save = time.time()
             if time.time() > deadline:
