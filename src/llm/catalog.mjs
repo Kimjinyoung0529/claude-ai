@@ -11,7 +11,8 @@ export const RUNTIME_MODELS = [
 export function pickDtype(model, caps) {
   const keys = Object.keys(model.sizes);
   if (caps.webgpu && caps.fp16 && keys.includes('q4f16')) return 'q4f16';
-  return keys.includes('q4') ? 'q4' : keys[0];
+  const cpu = keys.filter(k => !/f16/.test(k)); // fp16 가중치는 WASM 에서 쓰지 않는다
+  return cpu.sort((a, b) => model.sizes[a] - model.sizes[b])[0] || keys[0]; // 가장 작은 다운로드
 }
 export function pickDevice(caps) { return caps.webgpu ? 'webgpu' : 'wasm'; }
 export function modelBytes(model, dtype) { return (model.sizes[dtype] || 0) * 1e6; }
