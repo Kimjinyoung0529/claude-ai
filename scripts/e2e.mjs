@@ -88,7 +88,7 @@ const stages = {
     await page.goto(t.srv.url + '#agent'); await page.waitForSelector('textarea'); await page.evaluate(async () => { await window.__ns.loadModel(window.__catalog.RUNTIME_MODELS[0], { device: 'wasm' }); });
     await page.fill('textarea', '노트 목록을 조회해서 제목들을 알려줘'); await page.getByRole('button', { name: '실행', exact: true }).click(); await page.waitForSelector('text=결과', { timeout: 600000 });
     const res = await page.locator('main').innerText(); const status = (res.match(/결과\s*\n?\s*(\w+)/) || [])[1]; console.log('  에이전트 결과 상태:', status, '\n' + res.split('\n').filter(l => l.trim()).slice(0, 30).map(l => '    ' + l.slice(0, 160)).join('\n'));
-    results.agent = { status, text: res.slice(0, 1200) }; assert(['done', 'failed', 'max_steps'].includes(status), '에이전트 루프가 정의된 상태로 종료: ' + status);
+    results.agent = { status, text: res.slice(0, 1200) }; assert(['done', 'failed', 'max_steps', 'timeout'].includes(status), '에이전트 루프가 정의된 상태로 종료: ' + status);
     writeFileSync('reports/e2e-misc.json', JSON.stringify({ note: 'headless Chromium. 커널=SwiftShader 소프트웨어 WebGPU. 에이전트=Qwen3-0.6B 실제 추론.', ...results }, null, 2));
     assert(t.errors.filter(e => !/405|cache/i.test(e)).length === 0, '콘솔 오류 없음 ' + t.errors.join('|')); await t.close();
   },

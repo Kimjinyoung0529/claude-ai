@@ -27,7 +27,7 @@ export async function mountAgent(ctx, root) {
     ac = new AbortController(); run.textContent = '중지'; log.replaceChildren(); result.replaceChildren();
     const tools = allTools().filter(t => enabled.has(t.name));
     try { const r = await runAgent({ goal: goal.value, tools, signal: ac.signal, maxSteps: 8, timeoutMs: 300000, approve,
-      llm: async (messages, { signal }) => (await ctx.runLLM(messages, { signal, max_new_tokens: 400, temperature: 0.2, thinking: false })).text,
+      llm: async (messages, { signal }) => (await ctx.runLLM(messages, { signal, max_new_tokens: 160, temperature: 0.1, thinking: false })).text,
       onEvent: e => { if (e.type === 'step' || e.type === 'end') return; log.append(h('div', { class: 'item', style: { display: 'block', cursor: 'default' } }, h('span', { class: 'chip ' + (e.type === 'invalid' || e.type === 'denied' ? 'bad' : e.type === 'call' ? 'lav' : '') }, label[e.type] || e.type), ' ', h('code', {}, e.tool || ''), h('pre', {}, e.raw ?? e.body ?? e.error ?? (e.args ? JSON.stringify(e.args) : '')))); } });
       result.replaceChildren(h('div', { class: 'card' }, h('div', { class: 'row' }, h('b', {}, '결과'), h('span', { class: 'chip ' + (r.status === 'done' ? 'lime' : 'warn') }, r.status), h('span', { class: 'chip' }, r.steps + '단계')), h('div', { class: 'out' }, stripThink(r.answer || '')))); }
     catch (e) { toast(e.message, true); } finally { ac = null; run.textContent = '실행'; }
