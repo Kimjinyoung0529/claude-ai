@@ -1,1 +1,118 @@
-{"models":[]}
+{
+  "generatedAt": "2026-10-31T10:36:47.108Z",
+  "note": "목록에 있다고 실행되는 것이 아님. status 는 실제 조사·변환 시도 결과.",
+  "models": [
+    {
+      "id": "NoemaAI-labs/Noema-1.5-4B-Fast",
+      "status": "blocked-resource",
+      "detail": "원본 safetensors ≈8.4GB. 이 환경의 메모리 한도(≈14GB)에서 fp32 export 불가. qwen3_5 구조라 런타임은 지원.",
+      "license": null,
+      "revision": "5839fa8f7a6f13f11b9c210c90c4ce52bb42fc8e",
+      "gated": false
+    },
+    {
+      "id": "NoemaAI-labs/Noema-1.5-4B-Deep",
+      "status": "blocked-resource",
+      "detail": "위와 동일(같은 구조·크기).",
+      "license": null,
+      "revision": "894ee8b22877ac047c3954238240dbf32a3014e0",
+      "gated": false
+    },
+    {
+      "id": "clzoro/Qwen3.5-4B-Claude-distill",
+      "status": "blocked-resource",
+      "detail": "4B(≈8.4GB). qwen3_5 구조: onnx-community/Qwen3.5-4B-ONNX 와 같은 구조라 같은 exporter 레시피가 필요.",
+      "license": "apache-2.0",
+      "revision": "73831cbb42cd44d75d87e2c60e6a1504d18f1dd1",
+      "gated": false
+    },
+    {
+      "id": "clzoro/Qwen3.5-4B-KIMI-Distill",
+      "status": "blocked-resource",
+      "detail": "위와 동일.",
+      "license": "apache-2.0",
+      "revision": "53af26fe2c4238769d37716a20ba7c03de483e38",
+      "gated": false
+    },
+    {
+      "id": "yasserrmd/glm5.1-distill-onnx",
+      "status": "onnx-reuse",
+      "detail": "기존 ONNX(lfm2, q4 834MB) 존재. 런타임 lfm2 지원 확인됨. 브라우저 로딩·생성은 아직 검증하지 않음.",
+      "license": "apache-2.0",
+      "revision": "d171b5490712fb791b3e07d52b0e50540343da9b",
+      "gated": false
+    },
+    {
+      "id": "kakaocorp/kanana-2-1.3b-instruct",
+      "status": "blocked-exporter",
+      "detail": "kanana2_tiny 는 사용자 정의 코드(trust_remote_code)이고 Transformers.js 4.3.2 가 지원하지 않는 구조.",
+      "license": "other",
+      "revision": "bf4786aa2a1908adce942d53976270132732f720",
+      "gated": false
+    },
+    {
+      "id": "kakaocorp/kanana-2-3b-instruct",
+      "status": "needs-export",
+      "detail": "qwen3 구조라 런타임 지원. 3B fp32 export 는 메모리 한도 때문에 genai 빌더 경로로 시도 필요.",
+      "license": "other",
+      "revision": "6a5d7889964c4c590299d16e309eabab1f73f8a9",
+      "gated": false
+    },
+    {
+      "id": "K-intelligence/Midm-2.0-Mini-Instruct",
+      "status": "needs-export",
+      "detail": "llama 구조(MIT). optimum fp32 export 는 RSS 13.9GB 에서 OOM. genai 빌더(int4) 경로 시도.",
+      "license": "mit",
+      "revision": "383eb221c52a32278f1985257b264ade8d982e60",
+      "gated": false
+    },
+    {
+      "id": "LGAI-EXAONE/EXAONE-4.0-1.2B",
+      "status": "blocked-exporter",
+      "detail": "exaone4 는 optimum exporter 도 Transformers.js 4.3.2 도 지원하지 않음(exaone 만 지원).",
+      "license": "other",
+      "revision": "3abf2810673c7c0778df64a73c2d52eab32d91c4",
+      "gated": false
+    },
+    {
+      "id": "naver-hyperclovax/HyperCLOVAX-SEED-Text-Instruct-1.5B",
+      "status": "blocked-access",
+      "detail": "원본이 gated(auto) — Hugging Face 로그인·접근 승인이 필요해 이 세션에서 받을 수 없음. llama 구조라 승인 후에는 Midm 과 같은 경로로 변환 가능.",
+      "license": "other",
+      "revision": "0728a47d632019a8da5f53b663db1c175dc04115",
+      "gated": "auto"
+    },
+    {
+      "id": "ibm-granite/granite-4.2-3b",
+      "status": "needs-export",
+      "detail": "granite 구조(Apache-2.0), optimum·런타임 모두 지원. 3B 라 메모리 한도 때문에 genai 빌더 경로로 시도 필요.",
+      "license": "apache-2.0",
+      "revision": "4e9c275e232f10211ec88644d106a1f6a1b60e06",
+      "gated": false
+    },
+    {
+      "id": "LiquidAI/LFM2.5-2.6B",
+      "status": "blocked-exporter",
+      "detail": "lfm2 는 런타임 지원이나 optimum exporter 미지원. 직접 export 레시피 필요.",
+      "license": "other",
+      "revision": "b212e75975bbda9676a94d3cb7b2ca25b65fed48",
+      "gated": false
+    },
+    {
+      "id": "google/gemma-4-E2B-it",
+      "status": "blocked-exporter",
+      "detail": "gemma4(멀티모달·PLE) 는 런타임이 지원하나 변환 레시피를 이 환경에서 확인하지 못함.",
+      "license": "apache-2.0",
+      "revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+      "gated": false
+    },
+    {
+      "id": "mistralai/Ministral-3-3B-Instruct-2512",
+      "status": "blocked-exporter",
+      "detail": "mistral3(멀티모달). 런타임 지원이나 변환 레시피를 이 환경에서 확인하지 못함.",
+      "license": "apache-2.0",
+      "revision": "b35d4dfe56c142746f54dbd64f579faab2744308",
+      "gated": false
+    }
+  ]
+}
