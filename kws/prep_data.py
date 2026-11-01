@@ -74,7 +74,8 @@ def _locate(y, text):
     m, vocab = _ST["model"], _ST["vocab"]
     chars = list(text)
     ids = vocab.encode(text)
-    if len(ids) != sum(len(to_jamo(c)) for c in chars):   # 어휘 밖 글자가 있으면 건너뜀
+    tl = [tok_len(c) for c in chars]                      # 글자별 토큰 수 (한글=자모 개수, 공백/부호=1)
+    if len(ids) != sum(tl):                               # 어휘 밖 글자가 있으면 건너뜀
         return []
     mel = (audio.wav_to_mel(y) - _ST["mean"]) / _ST["std"]
     if len(mel) < len(ids) + 2:
@@ -86,13 +87,19 @@ def _locate(y, text):
         lp = m.aligner(idt, mt, pad, beta_prior(torch.tensor([T]), torch.tensor([Fm]), T, Fm))
         dur = mas(lp.transpose(1, 2), torch.ones(1, T, dtype=torch.bool), torch.ones(1, Fm, dtype=torch.bool))[0].numpy()
     cum = np.concatenate([[0], np.cumsum(dur)])
-    ntok = np.cumsum([0] + [len(to_jamo(c)) for c in chars])
+    ntok = np.cumsum([0] + tl)
     spans = []
     for w in WORDS:
         for mm in text_finditer(text, w):
             s, e = ntok[mm[0]], ntok[mm[1]]
             spans.append((cum[s] * audio.HOP / C.SR, cum[e] * audio.HOP / C.SR))
     return spans
+
+
+def tok_len(c):
+    """글자 하나가 TTS 어휘에서 차지하는 토큰 수. 한글은 초/중/종성 자모 개수, 그 외(공백·부호)는 1."""
+    from jamo import h2j
+    return len(h2j(c)) if "가" <= c <= "힣" else 1
 
 
 def text_finditer(text, w):
