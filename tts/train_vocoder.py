@@ -45,12 +45,21 @@ def main():
     ap.add_argument("--batch", type=int, default=6)
     ap.add_argument("--threads", type=int, default=2)
     ap.add_argument("--lr", type=float, default=2e-4)
+    ap.add_argument("--gta", default="", help="GTA 멜 pkl (tts.gen_gta 출력). 주면 TTS 가 만든 멜로 미세조정")
+    ap.add_argument("--gta_ratio", type=float, default=0.8, help="GTA 멜을 쓸 확률(나머지는 실제 멜)")
+    ap.add_argument("--init", default="", help="시작 가중치(ckpt/voc.pt 등). 체크포인트가 없을 때만")
+    ap.add_argument("--tag", default="voc", help="체크포인트 이름 ckpt/<tag>.pt")
     a = ap.parse_args()
     torch.set_num_threads(a.threads)
+    CK = f"ckpt/{a.tag}.pt"
+    EXPORT = "release/vocoder_gta.pt" if a.gta else "release/vocoder.pt"
 
     d = pickle.load(open("data/proc/data.pkl", "rb"))
     mean, std = d["mean"], d["std"]
     mels = [x["mel"] for x in d["items"]]
+    gta = pickle.load(open(a.gta, "rb")) if a.gta else None
+    if gta is not None:
+        assert len(gta) == len(mels), (len(gta), len(mels))
     wavs = pickle.load(open("data/proc/kss_wav.pkl", "rb"))
     keep = [i for i in range(len(wavs) - N_HOLD) if len(mels[i]) > SEG + 2]
     print("utts", len(keep), flush=True)
@@ -63,18 +72,23 @@ def main():
     mel_fn = make_mel_fn()
     os.makedirs("ckpt", exist_ok=True)
     step = 0
-    if os.path.exists("ckpt/voc.pt"):
-        s = torch.load("ckpt/voc.pt")
+    if os.path.exists(CK):
+        s = torch.load(CK)
         G.load_state_dict(s["G"]); D.load_state_dict(s["D"])
         oG.load_state_dict(s["oG"]); oD.load_state_dict(s["oD"]); step = s["step"]
         print("resumed at", step, flush=True)
+    elif a.init:
+        s = torch.load(a.init)
+        G.load_state_dict(s["G"]); D.load_state_dict(s["D"])
+        print("initialized from", a.init, "(step", s.get("step"), ")", flush=True)
 
     def batch():
         mm, yy = [], []
         for i in random.sample(keep, a.batch):
             n = len(mels[i]) - SEG - 1
             f0 = random.randint(0, n)
-            mm.append(mels[i][f0:f0 + SEG].astype(np.float32).T)
+            src = gta[i] if (gta is not None and random.random() < a.gta_ratio) else mels[i]
+            mm.append(src[f0:f0 + SEG].astype(np.float32).T)
             seg = wavs[i][max(0, f0 * audio.HOP - 1): (f0 + SEG) * audio.HOP].astype(np.float32) / 32767
             seg = preemph(seg)[-SEG * audio.HOP:] if f0 > 0 else preemph(seg)
             yy.append(seg[: SEG * audio.HOP])
@@ -83,7 +97,7 @@ def main():
     def export():
         os.makedirs("release", exist_ok=True)
         torch.save({"G": {k: v.half() for k, v in G.state_dict().items()}, "mean": mean, "std": std},
-                   "release/vocoder.pt")
+                   EXPORT)
 
     t0 = last_save = time.time()
     deadline = t0 + a.minutes * 60
@@ -111,10 +125,10 @@ def main():
                   f"D {lD.item():.3f} elapsed {(time.time() - t0) / 60:.1f}m", flush=True)
         if time.time() - last_save > 120:
             torch.save({"G": G.state_dict(), "D": D.state_dict(), "oG": oG.state_dict(),
-                        "oD": oD.state_dict(), "step": step}, "ckpt/voc.pt")
+                        "oD": oD.state_dict(), "step": step}, CK)
             last_save = time.time()
     torch.save({"G": G.state_dict(), "D": D.state_dict(), "oG": oG.state_dict(),
-                "oD": oD.state_dict(), "step": step}, "ckpt/voc.pt")
+                "oD": oD.state_dict(), "step": step}, CK)
     export()
     print("done, step", step, flush=True)
 
