@@ -112,12 +112,19 @@ def text_finditer(text, w):
 def _shard(args):
     f, held_spk, seed = args
     rng = random.Random(seed)
-    d = pd.read_parquet(f, columns=["speaker_id", "audio", "text"])
+    import pyarrow.parquet as pq
     train_win, hana, held = [], [], {}
     from tts.text import normalize
     allowed = set(_ST["vocab"].symbols[1:])
     from tts.text import to_jamo
-    for _, r in d.iterrows():
+
+    def rows():                       # 조각 전체를 메모리에 올리지 않고 64행씩 읽는다
+        pf = pq.ParquetFile(f)
+        for b in pf.iter_batches(batch_size=64, columns=["speaker_id", "audio", "text"]):
+            for r in b.to_pylist():
+                yield r
+
+    for r in rows():
         spk = int(r["speaker_id"])
         y = _decode(r["audio"]["bytes"])
         text = normalize(r["text"])
@@ -154,7 +161,7 @@ def neg():
     print(f"화자 {len(spks)}명 중 평가용 {len(held_spk)}명 분리", flush=True)
     t0 = time.time()
     tw, hn, held = [], [], {}
-    with Pool(min(4, len(files)), initializer=_init_align) as pool:
+    with Pool(3, initializer=_init_align, maxtasksperchild=1) as pool:   # 메모리 한도(OOM) 때문에 작업자 3개, 조각마다 새로 시작
         for i, (a, b, c) in enumerate(pool.imap_unordered(_shard, [(f, held_spk, i) for i, f in enumerate(files)])):
             tw += a; hn += b
             for k, v in c.items():
