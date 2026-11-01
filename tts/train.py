@@ -136,7 +136,7 @@ def main():
     opt = torch.optim.AdamW(model.parameters(), lr=a.lr, betas=(0.9, 0.98), weight_decay=1e-6)
     os.makedirs("ckpt", exist_ok=True)
     path, best_path = f"ckpt/{a.stage}.pt", f"ckpt/{a.stage}_best.pt"
-    step, lr_scale, warm_from = 0, 1.0, int(a.stage == "ft")
+    step, lr_scale, warm_from = 0, 1.0, int(a.stage != "pre")
     if os.path.exists(path):
         s = torch.load(path)
         model.load_state_dict(s["model"]); opt.load_state_dict(s["opt"])
