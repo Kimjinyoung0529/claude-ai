@@ -96,9 +96,9 @@ def main():
     last_save = t0
     model.train()
     PROMPTS = ["대한민국은", "수학은", "서울특별시는", "김민수는"]
-    while time.time() - t0 < total:
+    while elapsed0 + time.time() - t0 < total:
         el = elapsed0 + time.time() - t0
-        frac = min(1.0, (time.time() - t0) / total)
+        frac = min(1.0, el / total)
         lr = a.lr * min(1.0, (step + 1) / 200) * (0.1 + 0.9 * 0.5 * (1 + math.cos(math.pi * frac)))
         for g in opt.param_groups:
             g["lr"] = lr
