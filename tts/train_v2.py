@@ -136,7 +136,7 @@ def main():
     model.set_stats(stats["lf0_mean"], stats["lf0_std"], stats["e_mean"], stats["e_std"], mean, std)
     opt = torch.optim.AdamW(model.parameters(), lr=a.lr, betas=(0.9, 0.98), weight_decay=1e-6)
     os.makedirs("ckpt", exist_ok=True)
-    path, best_path = f"ckpt/{a.stage}.pt", f"ckpt/{a.stage}_best.pt"
+    path, best_path = f"ckpt/tts_{a.stage}.pt", f"ckpt/tts_{a.stage}_best.pt"
     step, lr_scale = 0, 1.0
     if os.path.exists(path):
         s = torch.load(path)
