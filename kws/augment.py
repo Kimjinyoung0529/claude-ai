@@ -1,5 +1,6 @@
 """호출어 학습용 증강: 잡음 섞기, 합성 잔향, 마이크 특성(EQ), 이득/클리핑, 배경 음성(babble)."""
 import numpy as np
+from scipy.signal import fftconvolve
 
 from kws import config as C
 
@@ -34,7 +35,7 @@ def reverb(x, rng):
     h = synth_rir(rng)
     # 직접음 비중을 무작위로 섞어 잔향 세기를 조절
     wet = rng.uniform(0.2, 1.0)
-    y = np.convolve(x, h)[:len(x)]
+    y = fftconvolve(x, h)[:len(x)]            # FFT 합성곱 (np.convolve 는 1.5초 창에 2.6초나 걸려 학습을 막았다)
     return (1 - wet) * x + wet * y * (rms(x) / (rms(y) + 1e-9))
 
 
