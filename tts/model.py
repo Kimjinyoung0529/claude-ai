@@ -152,6 +152,31 @@ class TTS(nn.Module):
         )
         self.dec = Stack(d, dec_layers, heads, ff)
         self.out = nn.Linear(d, N_MELS)
+        # --- v2: 토큰별 피치/에너지 예측기 (FastPitch 방식). 임베딩은 0 초기화 -> 처음엔 v1 과 동일하게 동작
+        def _pred():
+            return nn.Sequential(nn.Conv1d(d, 128, 3, padding=1), nn.ReLU(), nn.Dropout(0.1),
+                                 nn.Conv1d(128, 128, 3, padding=1), nn.ReLU(), nn.Dropout(0.1),
+                                 nn.Conv1d(128, 1, 1))
+        self.pitch_pred, self.energy_pred = _pred(), _pred()
+        self.pitch_emb, self.energy_emb = nn.Conv1d(1, d, 3, padding=1), nn.Conv1d(1, d, 3, padding=1)
+        for m in (self.pitch_emb, self.energy_emb):
+            nn.init.zeros_(m.weight); nn.init.zeros_(m.bias)
+        # 정규화 통계: [평균, 표준편차]  (log f0 / 프레임 에너지 / 멜)
+        self.register_buffer("lf0_ms", torch.tensor([5.4, 0.3]))
+        self.register_buffer("e_ms", torch.tensor([0.0, 1.0]))
+        self.register_buffer("mel_ms", torch.tensor([0.0, 1.0]))
+
+    def set_stats(self, lf0_mean, lf0_std, e_mean, e_std, mel_mean, mel_std):
+        self.lf0_ms.copy_(torch.tensor([lf0_mean, lf0_std]))
+        self.e_ms.copy_(torch.tensor([e_mean, e_std]))
+        self.mel_ms.copy_(torch.tensor([mel_mean, mel_std]))
+
+    def predict_var(self, h):
+        return self.pitch_pred(h.transpose(1, 2)).squeeze(1), self.energy_pred(h.transpose(1, 2)).squeeze(1)
+
+    def add_var(self, h, pad, p, e):
+        h = h + self.pitch_emb(p.unsqueeze(1)).transpose(1, 2) + self.energy_emb(e.unsqueeze(1)).transpose(1, 2)
+        return h.masked_fill(pad.unsqueeze(-1), 0.0)
 
     def encode(self, ids, spk=None):
         pad = ids.eq(0)
@@ -161,8 +186,9 @@ class TTS(nn.Module):
         logd = self.dur(h.transpose(1, 2)).squeeze(1)
         return h, pad, logd
 
-    def forward(self, ids, mel, mel_len, spk=None):
-        """반환: dict(mel, dur, fs, bin, spread). spread=가장 긴 음소가 차지하는 프레임 비율(붕괴 감시)."""
+    def forward(self, ids, mel, mel_len, spk=None, f0=None, extra=False):
+        """반환: dict(mel, dur, fs, bin, spread[, pitch, energy]). spread=가장 긴 음소가 차지하는 프레임 비율.
+        f0(B,F; Hz, 0=무성)를 주면 토큰별 피치/에너지 목표로 교사강요 + 예측기 손실을 계산한다."""
         h, pad, logd = self.encode(ids, spk)
         B, T = ids.shape
         Fm = mel.size(1)
@@ -177,16 +203,40 @@ class TTS(nn.Module):
         bin_loss = -(torch.log(soft.clamp(min=1e-8)) * hard).sum() / hard.sum()
 
         dloss = ((logd - torch.log(dur + 1)).pow(2).masked_fill(pad, 0).sum() / (~pad).sum())
+        out = {}
+        if f0 is not None:
+            vm = (f0 > 0).float().masked_fill(fpad, 0.0)
+            lf0 = (torch.log(f0.clamp(min=1.0)) - self.lf0_ms[0]) / self.lf0_ms[1]
+            en = (torch.logsumexp(mel * self.mel_ms[1] + self.mel_ms[0], dim=-1) - self.e_ms[0]) / self.e_ms[1]
+            hT = hard.transpose(1, 2)                                   # (B, T, F)
+            cnt = hT.sum(-1).clamp(min=1)
+            v_cnt = (hT @ vm.unsqueeze(-1)).squeeze(-1)
+            p_tok = (hT @ (lf0 * vm).unsqueeze(-1)).squeeze(-1) / v_cnt.clamp(min=1) * (v_cnt > 0).float()
+            e_tok = (hT @ en.masked_fill(fpad, 0.0).unsqueeze(-1)).squeeze(-1) / cnt
+            p_hat, e_hat = self.predict_var(h)
+            ntok = (~pad).sum()
+            out["pitch"] = ((p_hat - p_tok).pow(2).masked_fill(pad, 0).sum() / ntok)
+            out["energy"] = ((e_hat - e_tok).pow(2).masked_fill(pad, 0).sum() / ntok)
+            if extra:
+                out["p_hat"], out["p_tok"], out["pad"] = p_hat.detach(), p_tok.detach(), pad
+            h = self.add_var(h, pad, p_tok, e_tok)
         x = length_regulate(h, dur, Fm)
         y = self.out(self.dec(x, fpad))
         mel_loss = ((y - mel).abs().mean(-1).masked_fill(fpad, 0).sum() / (~fpad).sum())
         spread = (dur.max(1).values / mel_len).mean()
-        return {"mel": mel_loss, "dur": dloss, "fs": fs, "bin": bin_loss, "spread": spread}
+        out.update({"mel": mel_loss, "dur": dloss, "fs": fs, "bin": bin_loss, "spread": spread})
+        return out
 
     @torch.no_grad()
-    def infer(self, ids, spk=None, speed=1.0):
+    def infer(self, ids, spk=None, speed=1.0, dur_jitter=0.0, var_scale=1.0):
+        """dur_jitter: 길이에 곱하는 로그정규 잡음의 표준편차(박자 변화). var_scale: 예측 피치/에너지 편차 배율(억양 강조)."""
         h, pad, logd = self.encode(ids, spk)
-        dur = (torch.exp(logd) - 1).clamp(min=1).mul(1.0 / speed).round().long()
+        p_hat, e_hat = self.predict_var(h)
+        h = self.add_var(h, pad, p_hat * var_scale, e_hat * var_scale)
+        dur = (torch.exp(logd) - 1).clamp(min=1)
+        if dur_jitter > 0:
+            dur = dur * torch.exp(torch.randn_like(dur) * dur_jitter)
+        dur = dur.mul(1.0 / speed).round().long().clamp(min=1)
         dur = dur.masked_fill(pad, 0)
         L = int(dur.sum(1).max())
         x = length_regulate(h, dur, L)
