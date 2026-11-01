@@ -40,6 +40,19 @@ class GPT(nn.Module):
         self.ln = nn.LayerNorm(d)
         self.head = nn.Linear(d, vocab, bias=False)
         self.head.weight = self.tok.weight
+        self.apply(self._init)
+        for b in self.blocks:      # 잔차 경로 출력은 깊이에 맞춰 작게 (GPT-2 방식)
+            nn.init.normal_(b.proj.weight, 0.0, 0.02 / math.sqrt(2 * layers))
+            nn.init.normal_(b.mlp[2].weight, 0.0, 0.02 / math.sqrt(2 * layers))
+
+    @staticmethod
+    def _init(m):
+        if isinstance(m, nn.Linear):
+            nn.init.normal_(m.weight, 0.0, 0.02)
+            if m.bias is not None:
+                nn.init.zeros_(m.bias)
+        elif isinstance(m, nn.Embedding):
+            nn.init.normal_(m.weight, 0.0, 0.02)
 
     def forward(self, ids, past=None, start=0):
         B, T = ids.shape
